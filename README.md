@@ -8,7 +8,7 @@
 [![Codecov](https://codecov.io/gh/notZaki/CancerImagingArchive.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/notZaki/CancerImagingArchive.jl)
 [![Coveralls](https://coveralls.io/repos/github/notZaki/CancerImagingArchive.jl/badge.svg?branch=master)](https://coveralls.io/github/notZaki/CancerImagingArchive.jl?branch=master)
 
-A Julia interface for The Cancer Imaging Archive (TCIA) REST-API
+A Julia interface for [The Cancer Imaging Archive (TCIA) REST-API](https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface+%28REST+API%29+Usage+Guide)
 
 ## Installation
 
