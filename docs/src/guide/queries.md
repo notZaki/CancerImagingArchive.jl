@@ -121,11 +121,15 @@ That's because the query returns the SeriesInstanceUID which is needed to downlo
 
 !!! note
 
-    Although the above example only shows the SeriesInstanceUID, the output actually contains more information which is not shown because there isn't enough screen space. This is why the top of each output states that it is a `Nx15 DataFrames` object where 14 columns are not being printed. The entire table could be printed by:
+    Although the above example only shows the SeriesInstanceUID, the output actually contains more information which is not shown because there isn't enough screen space. This is why the top of each output states that it is a `Nx16 DataFrames` object where 15 columns are not being printed. The entire table could be printed by:
     ```julia
     series_dataframe = series(patient = "TCGA-QQ-A8VF");
     show(series_dataframe, allrows = true, allcols = true)
     ```
+
+!!! warning
+
+    Passing `format = "json"` will result in one fewer column. This is because the `AnnotationsFlag` field is returned for CSV output but not for JSON. 
 
 ### Imaging series size
 
@@ -133,6 +137,10 @@ The size (in bytes) and number of images for a given imaging series is given by
 ```@repl ex
 series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
 ```
+
+!!! warning
+
+    It is recommended that `series_size()` should **not** be used with `format = json`. This is because the json version interprets the `TotalSizeInBytes` as string/text rather than a number.
 
 ## Service-Object Pairs (SOP)
 
