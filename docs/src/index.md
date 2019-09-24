@@ -4,9 +4,9 @@ The `CancerImagingArchive.jl` module provides a Julia interface for exploring an
 
 ## Installation
 
-This module is not currently registered in Julia's general registry but it can be still be installed by
+This module can be installed by:
 ```julia
-julia> ]add https://github.com/notZaki/CancerImagingArchive.jl.git
+julia> ]add CancerImagingArchive
 ```
 Once installed, the package can be loaded via
 ```julia

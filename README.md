@@ -1,3 +1,4 @@
+<img src="./docs/src/assets/logo.svg" width="350" height="200"></img>
 # CancerImagingArchive.jl
 
 <!--
@@ -15,7 +16,7 @@ A Julia interface for [The Cancer Imaging Archive (TCIA) REST-API](https://wiki.
 The package can be installed by
 
 ```julia
-julia> ]add https://github.com/notZaki/CancerImagingArchive.jl.git
+julia> ]add CancerImagingArchive
 ```
 
 The [documentation pages](https://notZaki.github.io/CancerImagingArchive.jl/dev) provide details/examples of how to use the package.
