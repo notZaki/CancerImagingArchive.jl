@@ -1,54 +1,199 @@
-using CancerImagingArchive
+using CancerImagingArchive, DataFrames
 using Test
 
-@testset "CancerImagingArchive.jl" begin
-    tmp = Dict(1 => "", 2 => "hello", 3 => "b", 4 => "", 5 => "ye")
-    CancerImagingArchive.remove_empty!(tmp)
-    @test tmp == Dict(2 => "hello", 3 => "b", 5 => "ye")
+#######
+# SETUP
+#######
 
+# Use global variable for filenames because we want to delete them if they already exist
+zip_file = "test.zip"
+dicom_file = "test.dcm"
+csv_file = "test.csv"
+json_file = "test.json"
+
+for file in [zip_file, dicom_file, csv_file, json_file]
+    rm(file, force = true)
+end
+
+# Helper function for comparing CSV/DataFrames vs JSON/DictionaryArrays
+function compare_csv_vs_json(csv, json; max_names = Inf)
+    names_in_csv = find_names_in_csv(csv)
+    names_in_json = find_names_in_json(json)
+    @test length(json) == length(csv[!, names_in_csv[1]])
+    @test length(names_in_json) == length(names_in_csv)
+    if length(names_in_json) > max_names
+        # Some cases have too many rows and they are not directly comparable because of types
+        names_in_json = names_in_json[1:max_names]
+        names_in_csv = names_in_csv[1:max_names]
+    end
+    for (idx, json_element) in enumerate(json)
+        for name in names_in_csv
+            if ismissing(csv[!, name][idx])
+                # Missing entries lead to this messy situation. Just check if both json/csv are empty/missing
+                @test isempty(json_element) || isempty(json_element[string(name)])
+                @test ismissing(csv[!, name][idx])
+            else
+                @test csv[!, name][idx] == json_element[string(name)]
+            end
+        end
+    end
+    return nothing
+end
+
+function find_names_in_csv(csv)
+    names_in_csv = names(csv)
+    if :AnnotationsFlag in names_in_csv
+        # This field occurs in csv but not json, so remove it
+        select!(csv, Not([:AnnotationsFlag]))
+    end
+    return names(csv)
+end
+
+function find_names_in_json(json_array)
+    # JSON names get ignored if the entry is missing so we can't just do collect(keys(json_array[1]))
+    found_names = []
+    num_names = 0
+    for json in json_array
+        cur_names = keys(json)
+        if length(cur_names) > num_names
+            found_names = collect(cur_names)
+            num_names = length(found_names)
+        end
+    end
+    return found_names
+end
+
+###############################################################################
+
+@testset "Queries - Collection" begin
+    @test_throws ErrorException collections(format = "unknown")
     collections_csv = collections()
     collections_json = collections(format = "json")
-    @test size(collections_csv)[1] == length(collections_json)
-    @test collections_csv[1,1] == collections_json[1]["Collection"]
-    @test collections_csv[end,1] ==  collections_json[end]["Collection"]
+    @test length(collections_json) > 90
+    compare_csv_vs_json(collections_csv, collections_json)
+end
 
-    @test length( modalities(collection = "TCGA-GBM", format = "json") ) >= 3
-    @test size(modalities(bodypart = "BREAST"))[1] >= 6
+@testset "Queries - Modalities" begin
+    @test length( modalities(collection = "TCGA-GBM", format = "json") ) > 2
+    @test length( modalities(bodypart = "BREAST", format = "json") ) > 5
+    compare_csv_vs_json(
+        modalities(collection = "TCGA-GBM", bodypart = "BRAIN"),
+        modalities(collection = "TCGA-GBM", bodypart = "BRAIN", format = "json"))
+end
 
-    @test bodyparts(collection = "TCGA-BRCA")[1,1] == "BREAST"
-    @test "BRAIN" in bodyparts(modality = "MR")[:,1]
+@testset "Queries - BodyParts" begin
+    @test "BRAIN" in bodyparts(modality = "MR").BodyPartExamined
+    compare_csv_vs_json(
+        bodyparts(collection = "CPTAC-HNSCC"),
+        bodyparts(collection = "CPTAC-HNSCC", format = "json"))
+end
 
-    manu_list = manufacturers(modality="mr", bodypart="BRAIN").Manufacturer
-    @test all( [manufacturer in manu_list for manufacturer in ["Philips", "Siemens", "GE", "Toshiba"]] )
-    @test length(manufacturers(format="json")) >= 70
+@testset "Queries - Manufacturers" begin
+    compare_csv_vs_json(
+        manufacturers(collection = "TCGA-KICH", modality = "MR"),
+        manufacturers(collection = "TCGA-KICH", modality = "MR", format = "json"))
+    compare_csv_vs_json(
+        manufacturers(bodypart = "BREAST"),
+        manufacturers(bodypart = "BREAST", format = "json"))
+end
 
-    @test length(patients(collection = "RIDER NEURO MRI", format = "json")) == 19
-    patients_OT = patients_by_modality(collection = "ACRIN-FLT-Breast", modality = "OT", format = "json")
-    @test patients_OT[1]["PatientID"] == "ACRIN-FLT-Breast_066"
+@testset "Queries - Patients" begin
+    compare_csv_vs_json(
+        patients(collection = "TCGA-THCA"),
+        patients(collection = "TCGA-THCA", format = "json"))
 
-    study = studies(collection = "RIDER PHANTOM PET-CT")
-    @test length(study.PatientID) == 20
-    series_ids = series(collection = "RIDER PHANTOM PET-CT", patient = study.PatientID[1]).SeriesInstanceUID
-    @test length(series_ids) == study.SeriesCount[1]
-    @test series_size(series = series_ids[1], format = "json")[1]["ObjectCount"] == 47
+    # Following criteria should only find one patient
+    found_patient = patients_by_modality(collection = "ACRIN-FLT-Breast", modality = "OT")
+    @test length(found_patient.PatientID) == 1
+    @test found_patient.PatientID[1] == "ACRIN-FLT-Breast_066"
 
-    single_sop = sop(series = series_ids[1])
-    test_dicom = joinpath(@__DIR__, "test.dcm")
-    single_image(series = series_ids[1], sop = single_sop.SOPInstanceUID[1], file=test_dicom)
-    @test isfile(test_dicom)
-    @test filesize(test_dicom) == 38100
+    # Following criteria should find at least two patients
+    new_gbm_patients = newpatients(collection = "TCGA-GBM", date = "2015-01-01", format = "json")
+    @test length(new_gbm_patients) > 1
+end
 
-    test_zip = joinpath(@__DIR__, "test.zip")
-    images(series = series_ids[1], file = test_zip)
-    @test isfile(test_zip)
-    @test filesize(test_zip) == 1294021
+@testset "Queries - Studies" begin
+    # The CSV version requires a few manual changes, so we do them first
+    studies_csv = studies(collection = "TCGA-SARC")
+    # 1. Convert the date to plain strings so that they can be compared with the json version
+    studies_csv.StudyDate = string.(studies_csv.StudyDate)
+    # 2. Remove the escape characters in the string. These occur in the study description
+    for (idx, description) in enumerate(studies_csv.StudyDescription)
+        studies_csv.StudyDescription[idx] = replace(description, "\\" => "")
+    end
 
-    @test length(newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) == 3
-    @test isempty(newstudies(collection="TCGA-GBM", date="9999-01-01", format="json"))
+    compare_csv_vs_json(
+        studies_csv,
+        studies(collection = "TCGA-SARC", format = "json"))
 
-    @test dataframe_to_csv(dataframe = study, file = "test.csv") == nothing
-    @test dictionary_to_json(dictionary = patients_OT, file = "test.json") == nothing
+    # Following criteria should find at least three series
+    @test length(newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) > 2
+end
 
-    ## Broken for some reason
-    @test length(newpatients(collection="TCGA-GBM", date="1940-01-01", format = "json")) > 1
+@testset "Queries - Series" begin
+    compare_csv_vs_json(
+        series(collection = "TCGA-THCA"),
+        series(collection = "TCGA-THCA", format = "json"), max_names = 3)
+    compare_csv_vs_json(
+        series(patient = "TCGA-QQ-A8VF"),
+        series(patient = "TCGA-QQ-A8VF", format = "json"), max_names = 3)
+    compare_csv_vs_json(
+        series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806"),
+        series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806", format = "json"), max_names = 3)
+    compare_csv_vs_json(
+        series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
+        series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
+
+    # Can not use compare_csv_vs_json() on series_size() because TotalSizeInBytes has different types
+    dce_series_json = series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
+    @test dce_series_json["TotalSizeInBytes"] == "149149266.000000"
+    dce_series_csv = series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+    @test dce_series_csv.TotalSizeInBytes[1] ≈ 149149266
+    @test dce_series_csv.ObjectCount[1] == dce_series_json["ObjectCount"] == 1120
+end
+
+@testset "Queries - SOP" begin
+    compare_csv_vs_json(
+        sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948"),
+        sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format = "json"))
+end
+
+@testset "Data Download" begin
+    patient_studies = studies(collection = "TCGA-THCA")
+    chosen_study = patient_studies.StudyInstanceUID[1]
+    imaging_series = series(study = chosen_study)
+    chosen_series = imaging_series.SeriesInstanceUID[1]
+    series_sops = sop(series = chosen_series)
+    chosen_sop = series_sops.SOPInstanceUID[1]
+
+    images(series = chosen_series, file = zip_file)
+    @test isfile(zip_file)
+    @test filesize(zip_file) == 945849
+
+    single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
+    @test isfile(dicom_file)
+    @test filesize(dicom_file) == 980794
+end
+
+@testset "Utilities - remove_empty!()" begin
+    dict_potentialy_empty_values = Dict(1 => "", 2 => "hello", 3 => "b", 4 => "", 5 => "ye")
+    CancerImagingArchive.remove_empty!(dict_potentialy_empty_values)
+    nonempty_keys = []
+    for (key, value) in dict_potentialy_empty_values
+        @test !isempty(value)
+        push!(nonempty_keys, key)
+    end
+    @test nonempty_keys == [2, 3, 5]
+end
+
+@testset "Utilities - Data writer" begin
+    tabular_data = collections()
+    dataframe_to_csv(dataframe = tabular_data, file = csv_file)
+    @test isfile(csv_file)
+    @test filesize(csv_file) == 1346
+
+    dict_array = collections(format = "json")
+    dictionary_to_json(dictionary = dict_array, file = json_file)
+    @test isfile(json_file)
+    @test filesize(json_file) == 4816
 end

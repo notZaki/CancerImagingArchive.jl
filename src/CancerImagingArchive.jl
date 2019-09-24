@@ -267,7 +267,7 @@ has_format(query, format) = haskey(query, "format") && query["format"]==format
 
 function _request_csv(url)
     r = HTTP.request("GET", url)
-    return CSV.read(r.body)
+    return CSV.read(r.body, copycols=true)
 end
 
 function _request_json(url)

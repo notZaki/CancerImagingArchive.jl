@@ -79,3 +79,21 @@ dictionary_to_json(dictionary = studies_array, file = "output_file.json")
 rm("output_file.csv")
 rm("output_file.json")
 ```
+
+## Note on types
+
+The DataFrames object tries to figure out the types from the input while the DictionaryArray just accepts whatever the API returns.
+For a practical example of this, suppose we want to know the size of an imaging series; the DataFrame version will be
+```@example ex
+series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+```
+while the JSON version will be
+```@repl ex
+series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
+```
+The difference between the two is that the DataFrames version recognizes that `TotalSizeInBytes` is a number whereas the DictionaryArray displays it as a string (because the API returns it as a string).
+
+DataFrames' ability to recognize types is usually helpful, but sometimes it can fail.
+For example, in an anonymized dataset where patient names are replaced by numbers, the DataFrames object will incorrectly treat the names as numbers.
+
+These differences are unlikely to cause problems in practice so it isn't something to be actively concerned about.
