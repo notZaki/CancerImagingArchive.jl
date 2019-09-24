@@ -32,7 +32,7 @@ The imaging modalities in a specific collection and/or anatomy are listed by:
 ```@repl ex
 modalities(collection = "TCGA-KIRP")
 modalities(bodypart = "BRAIN")
-modalities(collection = "TCGA-GBM", bodypart = "BRAIN")
+modalities(collection = "CPTAC-HNSCC", bodypart = "HEAD")
 ```
 
 !!! note
@@ -43,7 +43,7 @@ modalities(collection = "TCGA-GBM", bodypart = "BRAIN")
 
 The anatomy scanned in a specific collection and/or modality are listed by:
 ```@repl ex
-bodyparts(collection = "TCGA-GBM")
+bodyparts(collection = "CPTAC-HNSCC")
 bodyparts(modality = "CT")
 bodyparts(collection = "Soft-tissue-Sarcoma", modality = "MR")
 ```
@@ -83,12 +83,8 @@ patients_by_modality(collection = "TCGA-SARC", modality = "MR")
 In large collections, it can be useful to query patients that were added after a date specified as YYYY-MM-DD.
 This is accomplished by:
 ```@repl ex
-newpatients(collection = "TCGA-GBM", date = "2012-01-01")
+newpatients(collection = "TCGA-GBM", date = "2015-01-01")
 ```
-
-!!! warning
-
-    The `newpatients()` function currently does not work and I don't know why.
 
 ## Patient studies
 

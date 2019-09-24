@@ -7,7 +7,8 @@ export patients, patients_by_modality, newpatients, newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
 
-const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
+# const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
+const _host = "api.cancerimagingarchive.net/radiology"
 const _format = "csv"
 const _q = Dict(
     :collection => "Collection",

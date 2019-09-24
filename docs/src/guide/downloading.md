@@ -37,12 +37,8 @@ Continuing from the previous example, if we only wanted to download the first im
 
 ```@repl ex
 series_sops = sop(series = chosen_series)
-chosen_sop = series_sops.sop_instance_uid[1]
+chosen_sop = series_sops.SOPInstanceUID[1]
 ```
-
-!!! note
-
-    The `sop()` function returns a column named `sop_instance_uid` instead of `SOPInstanceUID`.
 
 ### Downloading the single image
 

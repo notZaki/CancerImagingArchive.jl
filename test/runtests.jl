@@ -34,7 +34,7 @@ using Test
 
     single_sop = sop(series = series_ids[1])
     test_dicom = joinpath(@__DIR__, "test.dcm")
-    single_image(series = series_ids[1], sop = single_sop.sop_instance_uid[1], file=test_dicom)
+    single_image(series = series_ids[1], sop = single_sop.SOPInstanceUID[1], file=test_dicom)
     @test isfile(test_dicom)
     @test filesize(test_dicom) == 38100
 
@@ -50,5 +50,5 @@ using Test
     @test dictionary_to_json(dictionary = patients_OT, file = "test.json") == nothing
 
     ## Broken for some reason
-    # newpatients(collection="TCGA-GBM", date="1940-01-01")
+    @test length(newpatients(collection="TCGA-GBM", date="1940-01-01", format = "json")) > 1
 end
