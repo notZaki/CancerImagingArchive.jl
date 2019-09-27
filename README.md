@@ -19,4 +19,10 @@ The package can be installed by
 julia> ]add CancerImagingArchive
 ```
 
+## Usage
+
 The [documentation pages](https://notZaki.github.io/CancerImagingArchive.jl/dev) provide details/examples of how to use the package.
+
+**Note:** Any manuscript produced using data from TCIA should cite: (1) TCIA, and (2) the specifc dataset. These details are mentioned on  the [Data Usage Policies and Restrictions](https://wiki.cancerimagingarchive.net/display/Public/Data+Usage+Policies+and+Restrictions) page on the TCIA wiki. 
+
+
