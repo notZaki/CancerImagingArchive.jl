@@ -1,5 +1,4 @@
 ```@setup ex
-push!(LOAD_PATH,"../../../src/")
 using CancerImagingArchive
 ```
 

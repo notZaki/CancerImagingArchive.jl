@@ -1,5 +1,4 @@
 ```@setup ex
-push!(LOAD_PATH,"../../../src/")
 using CancerImagingArchive
 ```
 
@@ -45,9 +44,13 @@ The anatomy scanned in a specific collection and/or modality are listed by:
 ```@repl ex
 bodyparts(collection = "CPTAC-HNSCC")
 bodyparts(modality = "CT")
-bodyparts(collection = "Soft-tissue-Sarcoma", modality = "MR")
+bodyparts(collection = "CPTAC-SAR", modality = "MR")
+bodyparts(collection = "CPTAC-SAR", modality = "CT")
 ```
-There are inter- and intra-collection variations in how body parts are named and sometimes the names are uncommon---such as "J brzuszna" in the above example which translates to "abdominal cavity".
+
+!!! note
+
+    There are inter- and intra-collection variations in how body parts are named and sometimes the names are uncommon---such as "J brzuszna" in the above example which translates to "abdominal cavity".
 
 ## Manufacturers
 
@@ -76,7 +79,7 @@ patients_by_modality(collection = "TCGA-SARC", modality = "MR")
 
 !!! note
 
-    Although the functionality of `patients_by_modality()` could be combined into the `patients()` function, they use a different query endpoint. They also return different information, i.e. `PatientSex` is only returned by `patients()` while `Modality` is only returned by `patients_by_modality()`. To keep these differences explicit, the two functions were given different names.
+    Although the functionality of `patients_by_modality()` could be combined into the `patients()` function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.
 
 ### Patients added after specific date
 
