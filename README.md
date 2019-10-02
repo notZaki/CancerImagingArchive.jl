@@ -1,4 +1,4 @@
-<img src="./docs/src/assets/logo.svg" width="350" height="200"></img>
+<a href="#"><img src="./docs/src/assets/logo.svg" width="350" height="200"></img></a>
 # CancerImagingArchive.jl
 
 <!--
