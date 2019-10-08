@@ -119,14 +119,19 @@ series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806
 series(modality = "CT", manufacturer = "TOSHIBA")
 series(bodypart = "EXTREMITY")
 ```
-This query's importance is hinted by the smorgasbord of parameters it accepts.
-That's because the query returns the SeriesInstanceUID which is needed to download images.
+This query's importance is hinted by the smorgasbord of parameters it accepts. 
+That's because this query returns the `SeriesInstanceUID` which is needed to download images.
+Although the above examples only show `PatientID`, the query actually returns more information which is not shown because of limited screen space. 
+The complete list of columns are:
+```@repl ex
+series_dataframe = series(patient = "TCGA-QQ-A8VF");
+names(series_dataframe)
+```
 
 !!! note
 
-    Although the above example only shows the SeriesInstanceUID, the output actually contains more information which is not shown because there isn't enough screen space. This is why the top of each output states that it is a `Nx16 DataFrames` object where 15 columns are not being printed. The entire table could be printed by:
+    The entire table could have been printed by:
     ```julia
-    series_dataframe = series(patient = "TCGA-QQ-A8VF");
     show(series_dataframe, allrows = true, allcols = true)
     ```
 
