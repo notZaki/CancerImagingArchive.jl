@@ -21,8 +21,19 @@ julia> ]add CancerImagingArchive
 
 ## Usage
 
-The [documentation pages](https://notZaki.github.io/CancerImagingArchive.jl/dev) provide details/examples of how to use the package.
+The [documentation pages](https://notZaki.github.io/CancerImagingArchive.jl/dev) provide details/examples of how to use the package.   
 
-**Note:** Any manuscript produced using data from TCIA should cite: (1) TCIA, and (2) the specifc dataset. These details are mentioned on  the [Data Usage Policies and Restrictions](https://wiki.cancerimagingarchive.net/display/Public/Data+Usage+Policies+and+Restrictions) page on the TCIA wiki. 
+## Notes
 
+This is **not** an official project of The Cancer Imaging Archive. If any problems are experienced with this package, then please open a [new issue here](https://github.com/notZaki/CancerImagingArchive.jl/issues).
 
+Please follow the [Data Usage Policies and Restrictions](https://wiki.cancerimagingarchive.net/display/Public/Data+Usage+Policies+and+Restrictions) outlined in the TCIA wiki.
+
+If this package is helpful, then great! There is no need to cite the package itself.  
+However, any manuscript produced using data from TCIA should cite: 
+
+1. TCIA [[link]](https://www.ncbi.nlm.nih.gov/pubmed/23884657)
+    ```
+    Clark K, Vendt B, Smith K, et al. The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository. Journal of Digital Imaging. 2013; 26(6): 1045-1057. doi: 10.1007/s10278-013-9622-7.
+    ```
+2. All citations specific to the datasets that were used. These details are mentioned on the [TCIA wiki](https://wiki.cancerimagingarchive.net/display/Public/Data+Usage+Policies+and+Restrictions). 
