@@ -190,10 +190,12 @@ end
     tabular_data = collections()
     dataframe_to_csv(dataframe = tabular_data, file = csv_file)
     @test isfile(csv_file)
-    @test filesize(csv_file) == 1346
+    println("Size of csv file: $(filesize(csv_file))")
+    @test filesize(csv_file) >= 1346
 
     dict_array = collections(format = "json")
     dictionary_to_json(dictionary = dict_array, file = json_file)
     @test isfile(json_file)
-    @test filesize(json_file) == 4816
+    println("Size of json file: $(filesize(json_file))")
+    @test filesize(json_file) >= 4816
 end
