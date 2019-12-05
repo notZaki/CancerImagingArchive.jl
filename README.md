@@ -16,7 +16,7 @@ A Julia interface for [The Cancer Imaging Archive (TCIA) REST-API](https://wiki.
 The package can be installed by
 
 ```julia
-julia> ]add CancerImagingArchive
+julia> ]add https://github.com/notZaki/CancerImagingArchive.jl.git#master
 ```
 
 ## Usage
