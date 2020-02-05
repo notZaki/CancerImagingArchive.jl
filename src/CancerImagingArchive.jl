@@ -2,7 +2,7 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
-export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, tcia_series, series_size
+export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, tcia_series, tcia_series_size
 export patients, patients_by_modality, newpatients, tcia_newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
@@ -165,11 +165,11 @@ function tcia_series(; collection = "", bodypart = "", manufacturer = "", modali
 end
 
 """
-    series_size(; series, format = "csv")
+    tcia_series_size(; series, format = "csv")
 
 Returns the total byte size and the number of objects in the given SeriesInstanceUID `series`.
 """
-function series_size(; series::AbstractString, format = _format)
+function tcia_series_size(; series::AbstractString, format = _format)
     endpoint = "/getSeriesSize"
     query = Dict(
         _q[:series] => series,

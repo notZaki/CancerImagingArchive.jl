@@ -144,10 +144,10 @@ end
         tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
         tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
 
-    # Can not use compare_csv_vs_json() on series_size() because TotalSizeInBytes has different types
-    dce_series_json = series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
+    # Can not use compare_csv_vs_json() on tcia_series_size() because TotalSizeInBytes has different types
+    dce_series_json = tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
     @test dce_series_json["TotalSizeInBytes"] == "149149266.000000"
-    dce_series_csv = series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+    dce_series_csv = tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
     @test dce_series_csv.TotalSizeInBytes[1] ≈ 149149266
     @test dce_series_csv.ObjectCount[1] == dce_series_json["ObjectCount"] == 1120
 end

@@ -84,11 +84,11 @@ rm("output_file.json")
 The DataFrames object tries to figure out the types from the input while the DictionaryArray just accepts whatever the API returns.
 For a practical example of this, suppose we want to know the size of an imaging series; the DataFrame version will be
 ```@example ex
-series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
 ```
 while the JSON version will be
 ```@repl ex
-series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
+tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
 ```
 The difference between the two is that the DataFrames version recognizes that `TotalSizeInBytes` is a number whereas the DictionaryArray displays it as a string (because the API returns it as a string).
 

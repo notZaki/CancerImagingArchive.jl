@@ -143,12 +143,12 @@ names(series_dataframe)
 
 The size (in bytes) and number of images for a given imaging series is given by
 ```@repl ex
-series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
 ```
 
 !!! warning
 
-    It is recommended that `series_size()` should **not** be used with `format = json`. This is because the json version interprets the `TotalSizeInBytes` as string/text rather than a number.
+    It is recommended that `tcia_series_size()` should **not** be used with `format = json`. This is because the json version interprets the `TotalSizeInBytes` as string/text rather than a number.
 
 ## Service-Object Pairs (SOP)
 
