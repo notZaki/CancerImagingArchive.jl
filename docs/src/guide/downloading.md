@@ -45,7 +45,7 @@ Once the SeriesInstanceUID and SOPInstanceUID are known, the dicom file can be d
 
 ```@repl ex
 dicom_file = "output_file.dcm";
-single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
+tcia_single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
 ```
 
 ```@setup ex

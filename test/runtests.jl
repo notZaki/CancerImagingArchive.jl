@@ -170,7 +170,7 @@ end
     @test isfile(zip_file)
     @test filesize(zip_file) == 945849
 
-    single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
+    tcia_single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
     @test isfile(dicom_file)
     @test filesize(dicom_file) == 980794
 end

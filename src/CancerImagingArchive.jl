@@ -4,7 +4,7 @@ using HTTP, CSV, DataFrames, JSON
 
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, tcia_studies, tcia_series, tcia_series_size
 export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudies, tcia_sop
-export single_image, images
+export tcia_single_image, images
 export dataframe_to_csv, dictionary_to_json
 
 # const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
@@ -206,12 +206,12 @@ function images(; series::AbstractString, file::AbstractString)
 end
 
 """
-    single_image(; series, sop, file)
+    tcia_single_image(; series, sop, file)
 
 Downloads a single DICOM image for the given SeriesInstanceUID `series` and SOPInstanceUID `sop`.
     The DICOM file is saved as `file`.
 """
-function single_image(; series::AbstractString, sop::AbstractString, file::AbstractString)
+function tcia_single_image(; series::AbstractString, sop::AbstractString, file::AbstractString)
     endpoint = "/getSingleImage"
     query = Dict(
         _q[:series] => series,
