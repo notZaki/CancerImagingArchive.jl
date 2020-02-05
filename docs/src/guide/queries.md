@@ -29,9 +29,9 @@ tcia_collections()
 
 The imaging modalities in a specific collection and/or anatomy are listed by:
 ```@repl ex
-modalities(collection = "TCGA-KIRP")
-modalities(bodypart = "BRAIN")
-modalities(collection = "CPTAC-HNSCC", bodypart = "HEAD")
+tcia_modalities(collection = "TCGA-KIRP")
+tcia_modalities(bodypart = "BRAIN")
+tcia_modalities(collection = "CPTAC-HNSCC", bodypart = "HEAD")
 ```
 
 !!! note

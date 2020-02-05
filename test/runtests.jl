@@ -74,11 +74,11 @@ end
 end
 
 @testset "Queries - Modalities" begin
-    @test length( modalities(collection = "TCGA-GBM", format = "json") ) > 2
-    @test length( modalities(bodypart = "BREAST", format = "json") ) > 5
+    @test length( tcia_modalities(collection = "TCGA-GBM", format = "json") ) > 2
+    @test length( tcia_modalities(bodypart = "BREAST", format = "json") ) > 5
     compare_csv_vs_json(
-        modalities(collection = "TCGA-GBM", bodypart = "BRAIN"),
-        modalities(collection = "TCGA-GBM", bodypart = "BRAIN", format = "json"))
+        tcia_modalities(collection = "TCGA-GBM", bodypart = "BRAIN"),
+        tcia_modalities(collection = "TCGA-GBM", bodypart = "BRAIN", format = "json"))
 end
 
 @testset "Queries - BodyParts" begin
