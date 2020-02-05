@@ -22,7 +22,7 @@ Detailed information is available in the TCIA's user guide which includes a [lis
 
 The names of all available collections on TCIA is obtained by:
 ```@repl ex
-collections()
+tcia_collections()
 ```
 
 ## Imaging modalities

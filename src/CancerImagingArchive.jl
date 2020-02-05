@@ -2,7 +2,7 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
-export collections, modalities, bodyparts, manufacturers, studies, series, series_size
+export tcia_collections, modalities, bodyparts, manufacturers, studies, series, series_size
 export patients, patients_by_modality, newpatients, newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
@@ -39,11 +39,11 @@ function remove_empty!(dictionary::Dict)
 end
 
 """
-    collections(; format = "csv")
+    tcia_collections(; format = "csv")
 
 Provides names of all the collections on TCIA.
 """
-function collections(; format = _format)
+function tcia_collections(; format = _format)
     endpoint = "/getCollectionValues"
     query = Dict(
         _q[:format] => format

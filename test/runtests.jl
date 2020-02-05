@@ -66,9 +66,9 @@ end
 ###############################################################################
 
 @testset "Queries - Collection" begin
-    @test_throws ErrorException collections(format = "unknown")
-    collections_csv = collections()
-    collections_json = collections(format = "json")
+    @test_throws ErrorException tcia_collections(format = "unknown")
+    collections_csv = tcia_collections()
+    collections_json = tcia_collections(format = "json")
     @test length(collections_json) > 90
     compare_csv_vs_json(collections_csv, collections_json)
 end
@@ -187,13 +187,13 @@ end
 end
 
 @testset "Utilities - Data writer" begin
-    tabular_data = collections()
+    tabular_data = tcia_collections()
     dataframe_to_csv(dataframe = tabular_data, file = csv_file)
     @test isfile(csv_file)
     println("Size of csv file: $(filesize(csv_file))")
     @test filesize(csv_file) >= 1346
 
-    dict_array = collections(format = "json")
+    dict_array = tcia_collections(format = "json")
     dictionary_to_json(dictionary = dict_array, file = json_file)
     @test isfile(json_file)
     println("Size of json file: $(filesize(json_file))")
