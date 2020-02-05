@@ -90,11 +90,11 @@ end
 
 @testset "Queries - Manufacturers" begin
     compare_csv_vs_json(
-        manufacturers(collection = "TCGA-KICH", modality = "MR"),
-        manufacturers(collection = "TCGA-KICH", modality = "MR", format = "json"))
+        tcia_manufacturers(collection = "TCGA-KICH", modality = "MR"),
+        tcia_manufacturers(collection = "TCGA-KICH", modality = "MR", format = "json"))
     compare_csv_vs_json(
-        manufacturers(bodypart = "BREAST"),
-        manufacturers(bodypart = "BREAST", format = "json"))
+        tcia_manufacturers(bodypart = "BREAST"),
+        tcia_manufacturers(bodypart = "BREAST", format = "json"))
 end
 
 @testset "Queries - Patients" begin

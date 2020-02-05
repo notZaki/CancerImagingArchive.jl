@@ -2,7 +2,7 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
-export tcia_collections, tcia_modalities, tcia_bodyparts, manufacturers, studies, series, series_size
+export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, series, series_size
 export patients, patients_by_modality, newpatients, newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
@@ -81,11 +81,11 @@ function tcia_bodyparts(; collection = "", modality = "", format = _format)
 end
 
 """
-    manufacturers(; collection, modality, bodypart, format = "csv")
+    tcia_manufacturers(; collection, modality, bodypart, format = "csv")
 
 Returns the hardware manufacturers for a given `collection` and/or `modality` and/or `bodypart`.
 """
-function manufacturers(; collection = "", modality = "",  bodypart = "", format = _format)
+function tcia_manufacturers(; collection = "", modality = "",  bodypart = "", format = _format)
     endpoint = "/getManufacturerValues"
     query = Dict(
         _q[:collection] => collection,

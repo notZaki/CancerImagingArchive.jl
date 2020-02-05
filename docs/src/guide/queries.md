@@ -56,9 +56,9 @@ tcia_bodyparts(collection = "CPTAC-SAR", modality = "CT")
 
 A list of scanner manufacturers for a specific collection/modality/anatomy is obtained by
 ```@repl ex
-manufacturers(collection = "TCGA-KICH")
-manufacturers(modality = "CT")
-manufacturers(bodypart = "BREAST")
+tcia_manufacturers(collection = "TCGA-KICH")
+tcia_manufacturers(modality = "CT")
+tcia_manufacturers(bodypart = "BREAST")
 ```
 The same manufacturer can have different names, e.g. `Philips`/`Philips Medical Systems` and `SIEMENS`/`Siemens`.
 
