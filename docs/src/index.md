@@ -15,8 +15,8 @@ julia> using CancerImagingArchive
 
 !!! note
 
-    This module uses simple names for its functions, e.g. `studies()`, `images()`, `tcia_patients()`.
-    The price for this simplicity is that these same names can no longer be used as variable names because that will conflict with the module's functions. To avoid this conflict, the module can alternatively be loaded by `import CancerImagingArchive`. The functions calls will then require the module name, i.e. `CancerImagingArchive.studies()` would have to be used instead of `studies()`.
+    This module uses simple names for its functions, e.g. `tcia_studies()`, `images()`, `tcia_patients()`.
+    The price for this simplicity is that these same names can no longer be used as variable names because that will conflict with the module's functions. To avoid this conflict, the module can alternatively be loaded by `import CancerImagingArchive`. The functions calls will then require the module name, i.e. `CancerImagingArchive.tcia_studies()` would have to be used instead of `tcia_studies()`.
 
 
 ## Usage

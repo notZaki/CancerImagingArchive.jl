@@ -93,13 +93,13 @@ newpatients(collection = "TCGA-GBM", date = "2015-01-01")
 
 A list of visits/studies for a given collection/patient is obtained by:
 ```@repl ex
-studies(collection = "TCGA-THCA")
-studies(patient = "TCGA-QQ-A8VF")
+tcia_studies(collection = "TCGA-THCA")
+tcia_studies(patient = "TCGA-QQ-A8VF")
 ```
 
 If the unique identifier (UID) for a study is known (a.k.a. StudyInstanceUID), then that can also be used
 ```@repl ex
-studies(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806")
+tcia_studies(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806")
 ```
 
 ### Patient studies added after specific data

@@ -13,7 +13,7 @@ Imaging data can be downloaded either as a `.zip` file containing an imaging ser
 The SeriesInstanceUID is needed to download an imaging series. The below example selects one series from the [TCGA-THCA collection](https://wiki.cancerimagingarchive.net/display/Public/TCGA-THCA).
 
 ```@repl ex
-patient_studies = studies(collection = "TCGA-THCA")
+patient_studies = tcia_studies(collection = "TCGA-THCA")
 chosen_study = patient_studies.StudyInstanceUID[1]
 imaging_series = tcia_series(study = chosen_study)
 chosen_series = imaging_series.SeriesInstanceUID[1]

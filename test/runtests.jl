@@ -114,7 +114,7 @@ end
 
 @testset "Queries - Studies" begin
     # The CSV version requires a few manual changes, so we do them first
-    studies_csv = studies(collection = "TCGA-SARC")
+    studies_csv = tcia_studies(collection = "TCGA-SARC")
     # 1. Convert the date to plain strings so that they can be compared with the json version
     studies_csv.StudyDate = string.(studies_csv.StudyDate)
     # 2. Remove the escape characters in the string. These occur in the study description
@@ -124,7 +124,7 @@ end
 
     compare_csv_vs_json(
         studies_csv,
-        studies(collection = "TCGA-SARC", format = "json"))
+        tcia_studies(collection = "TCGA-SARC", format = "json"))
 
     # Following criteria should find at least three series
     @test length(tcia_newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) > 2
@@ -159,7 +159,7 @@ end
 end
 
 @testset "Data Download" begin
-    patient_studies = studies(collection = "TCGA-THCA")
+    patient_studies = tcia_studies(collection = "TCGA-THCA")
     chosen_study = patient_studies.StudyInstanceUID[1]
     imaging_series = tcia_series(study = chosen_study)
     chosen_series = imaging_series.SeriesInstanceUID[1]
