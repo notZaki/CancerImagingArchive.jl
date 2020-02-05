@@ -24,7 +24,7 @@ chosen_series = imaging_series.SeriesInstanceUID[1]
 Once the SeriesInstanceUID is known, the imaging data can be downloaded as a zip file by:
 ```@repl ex
 zip_file = "output_file.zip"; # Can also be a path
-images(series = chosen_series, file = zip_file)
+tcia_images(series = chosen_series, file = zip_file)
 ```
 
 ## Single image

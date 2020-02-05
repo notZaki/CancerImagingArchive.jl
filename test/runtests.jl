@@ -166,7 +166,7 @@ end
     series_sops = tcia_sop(series = chosen_series)
     chosen_sop = series_sops.SOPInstanceUID[1]
 
-    images(series = chosen_series, file = zip_file)
+    tcia_images(series = chosen_series, file = zip_file)
     @test isfile(zip_file)
     @test filesize(zip_file) == 945849
 

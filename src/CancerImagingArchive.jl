@@ -4,7 +4,7 @@ using HTTP, CSV, DataFrames, JSON
 
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, tcia_studies, tcia_series, tcia_series_size
 export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudies, tcia_sop
-export tcia_single_image, images
+export tcia_single_image, tcia_images
 export dataframe_to_csv, dictionary_to_json
 
 # const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
@@ -193,11 +193,11 @@ function tcia_sop(; series::AbstractString, format = _format)
 end
 
 """
-    images(; series, file)
+    tcia_images(; series, file)
 
 Downloads the images for the given SeriesInstanceUID `series` as the given zip-file `file`.
 """
-function images(; series::AbstractString, file::AbstractString)
+function tcia_images(; series::AbstractString, file::AbstractString)
     endpoint = "/getImage"
     query = Dict(
         _q[:series] => series,
