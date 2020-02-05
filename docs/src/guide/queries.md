@@ -66,7 +66,7 @@ The same manufacturer can have different names, e.g. `Philips`/`Philips Medical 
 
 The patients in a given collection are listed by:
 ```@repl ex
-patients(collection = "TCGA-SARC")
+tcia_patients(collection = "TCGA-SARC")
 ```
 
 ### Patients for specific modality
@@ -79,7 +79,7 @@ patients_by_modality(collection = "TCGA-SARC", modality = "MR")
 
 !!! note
 
-    Although the functionality of `patients_by_modality()` could be combined into the `patients()` function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.
+    Although the functionality of `patients_by_modality()` could be combined into the `tcia_patients()` function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.
 
 ### Patients added after specific date
 

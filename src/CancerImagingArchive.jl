@@ -3,7 +3,7 @@ module CancerImagingArchive
 using HTTP, CSV, DataFrames, JSON
 
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, tcia_series, tcia_series_size
-export patients, patients_by_modality, newpatients, tcia_newstudies, sop
+export tcia_patients, patients_by_modality, newpatients, tcia_newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
 
@@ -97,11 +97,11 @@ function tcia_manufacturers(; collection = "", modality = "",  bodypart = "", fo
 end
 
 """
-    patients(; collection, format = "csv")
+    tcia_patients(; collection, format = "csv")
 
 Returns the patients in a given `collection`.
 """
-function patients(; collection = "", format = _format)
+function tcia_patients(; collection = "", format = _format)
     endpoint = "/getPatient"
     query = Dict(
         _q[:collection] => collection,
@@ -111,7 +111,7 @@ function patients(; collection = "", format = _format)
 end
 
 """
-    patients(; collection, modality, format = "csv")
+    tcia_patients(; collection, modality, format = "csv")
 
 Returns the patients in a given `collection` and `modality` (both inputs required).
 """

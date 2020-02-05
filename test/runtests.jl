@@ -99,8 +99,8 @@ end
 
 @testset "Queries - Patients" begin
     compare_csv_vs_json(
-        patients(collection = "TCGA-THCA"),
-        patients(collection = "TCGA-THCA", format = "json"))
+        tcia_patients(collection = "TCGA-THCA"),
+        tcia_patients(collection = "TCGA-THCA", format = "json"))
 
     # Following criteria should only find one patient
     found_patient = patients_by_modality(collection = "ACRIN-FLT-Breast", modality = "OT")
