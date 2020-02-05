@@ -2,7 +2,7 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
-export tcia_collections, tcia_modalities, bodyparts, manufacturers, studies, series, series_size
+export tcia_collections, tcia_modalities, tcia_bodyparts, manufacturers, studies, series, series_size
 export patients, patients_by_modality, newpatients, newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
@@ -66,11 +66,11 @@ function tcia_modalities(; collection = "", bodypart = "", format = _format)
 end
 
 """
-    bodyparts(; collection, modality, format = "csv")
+    tcia_bodyparts(; collection, modality, format = "csv")
 
 Returns the body parts examined in a given `collection` and/or by a given `modality`.
 """
-function bodyparts(; collection = "", modality = "", format = _format)
+function tcia_bodyparts(; collection = "", modality = "", format = _format)
     endpoint = "/getBodyPartValues"
     query = Dict(
         _q[:collection] => collection,

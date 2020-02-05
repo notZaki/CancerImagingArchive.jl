@@ -42,10 +42,10 @@ tcia_modalities(collection = "CPTAC-HNSCC", bodypart = "HEAD")
 
 The anatomy scanned in a specific collection and/or modality are listed by:
 ```@repl ex
-bodyparts(collection = "CPTAC-HNSCC")
-bodyparts(modality = "CT")
-bodyparts(collection = "CPTAC-SAR", modality = "MR")
-bodyparts(collection = "CPTAC-SAR", modality = "CT")
+tcia_bodyparts(collection = "CPTAC-HNSCC")
+tcia_bodyparts(modality = "CT")
+tcia_bodyparts(collection = "CPTAC-SAR", modality = "MR")
+tcia_bodyparts(collection = "CPTAC-SAR", modality = "CT")
 ```
 
 !!! note

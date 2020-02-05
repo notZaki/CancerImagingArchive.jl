@@ -82,10 +82,10 @@ end
 end
 
 @testset "Queries - BodyParts" begin
-    @test "BRAIN" in bodyparts(modality = "MR").BodyPartExamined
+    @test "BRAIN" in tcia_bodyparts(modality = "MR").BodyPartExamined
     compare_csv_vs_json(
-        bodyparts(collection = "CPTAC-HNSCC"),
-        bodyparts(collection = "CPTAC-HNSCC", format = "json"))
+        tcia_bodyparts(collection = "CPTAC-HNSCC"),
+        tcia_bodyparts(collection = "CPTAC-HNSCC", format = "json"))
 end
 
 @testset "Queries - Manufacturers" begin
