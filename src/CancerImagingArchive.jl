@@ -3,7 +3,7 @@ module CancerImagingArchive
 using HTTP, CSV, DataFrames, JSON
 
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, series, series_size
-export patients, patients_by_modality, newpatients, newstudies, sop
+export patients, patients_by_modality, newpatients, tcia_newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
 
@@ -231,12 +231,12 @@ function newpatients(; collection::AbstractString, date::AbstractString, format 
 end
 
 """
-    newstudies(; date, collection, patient, format = "csv")
+    tcia_newstudies(; date, collection, patient, format = "csv")
 
 Returns new studies for a given `collection` that were added after a given `date` formatted as `YYYY-MM-DD`.
     The `patient` ID can be optionally given.
 """
-function newstudies(; date::AbstractString, collection::AbstractString, patient = "", format = _format)
+function tcia_newstudies(; date::AbstractString, collection::AbstractString, patient = "", format = _format)
     endpoint = "/NewStudiesInPatientCollection"
     query = Dict(
         _q[:collection] => collection,

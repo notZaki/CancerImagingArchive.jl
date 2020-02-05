@@ -127,7 +127,7 @@ end
         studies(collection = "TCGA-SARC", format = "json"))
 
     # Following criteria should find at least three series
-    @test length(newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) > 2
+    @test length(tcia_newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) > 2
 end
 
 @testset "Queries - Series" begin

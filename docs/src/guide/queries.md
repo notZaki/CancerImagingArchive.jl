@@ -106,7 +106,7 @@ studies(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.29869011646542380587920637780
 
 A list of visits/studies that were added after some date, formatted by YYYY-MM-DD, can be obtained by:
 ```@repl ex
-newstudies(collection="TCGA-GBM", date="2015-01-01")
+tcia_newstudies(collection="TCGA-GBM", date="2015-01-01")
 ```
 
 ## Imaging series
