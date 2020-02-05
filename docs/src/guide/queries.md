@@ -86,7 +86,7 @@ tcia_patients_by_modality(collection = "TCGA-SARC", modality = "MR")
 In large collections, it can be useful to query patients that were added after a date specified as YYYY-MM-DD.
 This is accomplished by:
 ```@repl ex
-newpatients(collection = "TCGA-GBM", date = "2015-01-01")
+tcia_newpatients(collection = "TCGA-GBM", date = "2015-01-01")
 ```
 
 ## Patient studies

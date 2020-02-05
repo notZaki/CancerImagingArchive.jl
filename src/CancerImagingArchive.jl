@@ -220,7 +220,7 @@ function single_image(; series::AbstractString, sop::AbstractString, file::Abstr
     return request(endpoint, query, file = file)
 end
 
-function newpatients(; collection::AbstractString, date::AbstractString, format = _format)
+function tcia_newpatients(; collection::AbstractString, date::AbstractString, format = _format)
     endpoint = "/NewPatientsInCollection"
     query = Dict(
         _q[:collection] => collection,

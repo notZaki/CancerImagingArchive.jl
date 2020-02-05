@@ -108,7 +108,7 @@ end
     @test found_patient.PatientID[1] == "ACRIN-FLT-Breast_066"
 
     # Following criteria should find at least two patients
-    new_gbm_patients = newpatients(collection = "TCGA-GBM", date = "2015-01-01", format = "json")
+    new_gbm_patients = tcia_newpatients(collection = "TCGA-GBM", date = "2015-01-01", format = "json")
     @test length(new_gbm_patients) > 1
 end
 
