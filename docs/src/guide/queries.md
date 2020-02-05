@@ -73,13 +73,13 @@ tcia_patients(collection = "TCGA-SARC")
 
 To get a patients for which a specific modality was used, a slightly different function is used:
 ```@repl ex
-patients_by_modality(collection = "TCGA-SARC", modality = "CT")
-patients_by_modality(collection = "TCGA-SARC", modality = "MR")
+tcia_patients_by_modality(collection = "TCGA-SARC", modality = "CT")
+tcia_patients_by_modality(collection = "TCGA-SARC", modality = "MR")
 ```
 
 !!! note
 
-    Although the functionality of `patients_by_modality()` could be combined into the `tcia_patients()` function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.
+    Although the functionality of `tcia_patients_by_modality()` could be combined into the `tcia_patients()` function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.
 
 ### Patients added after specific date
 

@@ -103,7 +103,7 @@ end
         tcia_patients(collection = "TCGA-THCA", format = "json"))
 
     # Following criteria should only find one patient
-    found_patient = patients_by_modality(collection = "ACRIN-FLT-Breast", modality = "OT")
+    found_patient = tcia_patients_by_modality(collection = "ACRIN-FLT-Breast", modality = "OT")
     @test length(found_patient.PatientID) == 1
     @test found_patient.PatientID[1] == "ACRIN-FLT-Breast_066"
 
