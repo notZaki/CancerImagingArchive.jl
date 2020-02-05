@@ -132,17 +132,17 @@ end
 
 @testset "Queries - Series" begin
     compare_csv_vs_json(
-        series(collection = "TCGA-THCA"),
-        series(collection = "TCGA-THCA", format = "json"), max_names = 3)
+        tcia_series(collection = "TCGA-THCA"),
+        tcia_series(collection = "TCGA-THCA", format = "json"), max_names = 3)
     compare_csv_vs_json(
-        series(patient = "TCGA-QQ-A8VF"),
-        series(patient = "TCGA-QQ-A8VF", format = "json"), max_names = 3)
+        tcia_series(patient = "TCGA-QQ-A8VF"),
+        tcia_series(patient = "TCGA-QQ-A8VF", format = "json"), max_names = 3)
     compare_csv_vs_json(
-        series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806"),
-        series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806", format = "json"), max_names = 3)
+        tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806"),
+        tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806", format = "json"), max_names = 3)
     compare_csv_vs_json(
-        series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
-        series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
+        tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
+        tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
 
     # Can not use compare_csv_vs_json() on series_size() because TotalSizeInBytes has different types
     dce_series_json = series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
@@ -161,7 +161,7 @@ end
 @testset "Data Download" begin
     patient_studies = studies(collection = "TCGA-THCA")
     chosen_study = patient_studies.StudyInstanceUID[1]
-    imaging_series = series(study = chosen_study)
+    imaging_series = tcia_series(study = chosen_study)
     chosen_series = imaging_series.SeriesInstanceUID[1]
     series_sops = sop(series = chosen_series)
     chosen_sop = series_sops.SOPInstanceUID[1]

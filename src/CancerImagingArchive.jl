@@ -2,7 +2,7 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
-export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, series, series_size
+export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, studies, tcia_series, series_size
 export patients, patients_by_modality, newpatients, tcia_newstudies, sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
@@ -142,12 +142,12 @@ function studies(; collection = "", patient = "", study = "", format = _format)
 end
 
 """
-    series(; collection, bodypart, manufacturer, modality, model, patient, series, study, format = "csv")
+    tcia_series(; collection, bodypart, manufacturer, modality, model, patient, series, study, format = "csv")
 
 Returns series information for a given `collection`, `bodypart, `manufactuer`, `modality`,
     manufacturer `model, `patient`, SeriesInstanceUID `series`, or StudyInstanceUID `study`.
 """
-function series(; collection = "", bodypart = "", manufacturer = "", modality = "",
+function tcia_series(; collection = "", bodypart = "", manufacturer = "", modality = "",
                   model = "", patient = "", series = "", study = "", format = _format)
     endpoint = "/getSeries"
     query = Dict(

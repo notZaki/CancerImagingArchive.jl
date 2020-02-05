@@ -113,18 +113,18 @@ tcia_newstudies(collection="TCGA-GBM", date="2015-01-01")
 
 Each patient study consists of one or more imaging series which can be obtained by:
 ```@repl ex
-series(collection = "TCGA-THCA")
-series(patient = "TCGA-QQ-A8VF")
-series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806")
-series(modality = "CT", manufacturer = "TOSHIBA")
-series(bodypart = "EXTREMITY")
+tcia_series(collection = "TCGA-THCA")
+tcia_series(patient = "TCGA-QQ-A8VF")
+tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806")
+tcia_series(modality = "CT", manufacturer = "TOSHIBA")
+tcia_series(bodypart = "EXTREMITY")
 ```
 This query's importance is hinted by the smorgasbord of parameters it accepts. 
 That's because this query returns the `SeriesInstanceUID` which is needed to download images.
 Although the above examples only show `PatientID`, the query actually returns more information which is not shown because of limited screen space. 
 The complete list of columns are:
 ```@repl ex
-series_dataframe = series(patient = "TCGA-QQ-A8VF");
+series_dataframe = tcia_series(patient = "TCGA-QQ-A8VF");
 names(series_dataframe)
 ```
 

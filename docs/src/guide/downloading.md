@@ -15,7 +15,7 @@ The SeriesInstanceUID is needed to download an imaging series. The below example
 ```@repl ex
 patient_studies = studies(collection = "TCGA-THCA")
 chosen_study = patient_studies.StudyInstanceUID[1]
-imaging_series = series(study = chosen_study)
+imaging_series = tcia_series(study = chosen_study)
 chosen_series = imaging_series.SeriesInstanceUID[1]
 ```
 
