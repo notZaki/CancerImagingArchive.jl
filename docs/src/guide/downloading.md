@@ -35,7 +35,7 @@ To download a single image, both its SeriesInstanceUID and SOPInstanceUID must b
 Continuing from the previous example, if we only wanted to download the first image in `chosen_series`, then:
 
 ```@repl ex
-series_sops = sop(series = chosen_series)
+series_sops = tcia_sop(series = chosen_series)
 chosen_sop = series_sops.SOPInstanceUID[1]
 ```
 

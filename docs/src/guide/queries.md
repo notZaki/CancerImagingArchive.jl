@@ -155,6 +155,6 @@ tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.2419725270613474954
 Each imaging series consists of one or more images, each of which have a service-object-pair unique identifier (SOPInstanceUID).
 These can be listed by
 ```@repl ex
-sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+tcia_sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
 ```
 These identifiers are useful for accessing a specific image without having to download the entire imaging series.

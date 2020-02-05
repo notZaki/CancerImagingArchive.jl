@@ -3,7 +3,7 @@ module CancerImagingArchive
 using HTTP, CSV, DataFrames, JSON
 
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, tcia_studies, tcia_series, tcia_series_size
-export tcia_patients, tcia_patients_by_modality, newpatients, tcia_newstudies, sop
+export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudies, tcia_sop
 export single_image, images
 export dataframe_to_csv, dictionary_to_json
 
@@ -179,11 +179,11 @@ function tcia_series_size(; series::AbstractString, format = _format)
 end
 
 """
-    sop(; series, format = "csv")
+    tcia_sop(; series, format = "csv")
 
 Returns the SOPInstanceUIDs for the given SeriesInstanceUID `series`.
 """
-function sop(; series::AbstractString, format = _format)
+function tcia_sop(; series::AbstractString, format = _format)
     endpoint = "/getSOPInstanceUIDs"
     query = Dict(
         _q[:series] => series,

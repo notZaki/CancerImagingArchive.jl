@@ -154,8 +154,8 @@ end
 
 @testset "Queries - SOP" begin
     compare_csv_vs_json(
-        sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948"),
-        sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format = "json"))
+        tcia_sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948"),
+        tcia_sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format = "json"))
 end
 
 @testset "Data Download" begin
@@ -163,7 +163,7 @@ end
     chosen_study = patient_studies.StudyInstanceUID[1]
     imaging_series = tcia_series(study = chosen_study)
     chosen_series = imaging_series.SeriesInstanceUID[1]
-    series_sops = sop(series = chosen_series)
+    series_sops = tcia_sop(series = chosen_series)
     chosen_sop = series_sops.SOPInstanceUID[1]
 
     images(series = chosen_series, file = zip_file)
