@@ -48,8 +48,6 @@ tcia_bodyparts(collection = "CPTAC-SAR", modality = "MR")
 tcia_bodyparts(collection = "CPTAC-SAR", modality = "CT")
 ```
 
-    There are inter- and intra-collection variations in how body parts are named and sometimes the names are uncommon---such as "J brzuszna" in the above example which translates to "abdominal cavity".
-
 ## Manufacturers
 
 A list of scanner manufacturers for a specific collection/modality/anatomy is obtained by
