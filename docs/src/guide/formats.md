@@ -13,7 +13,7 @@ DataFrames display the results in a table and this is the default behaviour.
 The table is useful for visually analysing the results.
 For example, the studies in the [TCGA-SARC collection](https://wiki.cancerimagingarchive.net/display/Public/TCGA-SARC) can be obtained by:
 ```@example ex
-studies_df = studies(collection = "TCGA-SARC")
+studies_df = tcia_studies(collection = "TCGA-SARC")
 ```
 
 ### Manipulating the DataFrame object
@@ -45,7 +45,7 @@ dataframe_to_csv(dataframe = studies_df, file = "output_file.csv")
 Instead of a table, an array of dictionaries can be obtained by passing `format = "json"` as an argument when calling the query function.
 For example, the DataFrame from the previous example could have been obtained as an array by:
 ```@example ex
-studies_array = studies(collection = "TCGA-SARC", format = "json")
+studies_array = tcia_studies(collection = "TCGA-SARC", format = "json")
 ```
 
 ### Manipulating the Dictionary Array
@@ -84,11 +84,11 @@ rm("output_file.json")
 The DataFrames object tries to figure out the types from the input while the DictionaryArray just accepts whatever the API returns.
 For a practical example of this, suppose we want to know the size of an imaging series; the DataFrame version will be
 ```@example ex
-series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
 ```
 while the JSON version will be
 ```@repl ex
-series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
+tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
 ```
 The difference between the two is that the DataFrames version recognizes that `TotalSizeInBytes` is a number whereas the DictionaryArray displays it as a string (because the API returns it as a string).
 

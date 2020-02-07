@@ -2,9 +2,9 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
-export collections, modalities, bodyparts, manufacturers, studies, series, series_size
-export patients, patients_by_modality, newpatients, newstudies, sop
-export single_image, images
+export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, tcia_studies, tcia_series, tcia_series_size
+export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudies, tcia_sop
+export tcia_single_image, tcia_images
 export dataframe_to_csv, dictionary_to_json
 
 # const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
@@ -39,11 +39,11 @@ function remove_empty!(dictionary::Dict)
 end
 
 """
-    collections(; format = "csv")
+    tcia_collections(; format = "csv")
 
 Provides names of all the collections on TCIA.
 """
-function collections(; format = _format)
+function tcia_collections(; format = _format)
     endpoint = "/getCollectionValues"
     query = Dict(
         _q[:format] => format
@@ -52,11 +52,11 @@ function collections(; format = _format)
 end
 
 """
-    modalities(; collection, bodypart, format = "csv")
+    tcia_modalities(; collection, bodypart, format = "csv")
 
 Returns the modalities used in a given `collection` and/or for a given `bodypart`.
 """
-function modalities(; collection = "", bodypart = "", format = _format)
+function tcia_modalities(; collection = "", bodypart = "", format = _format)
     endpoint = "/getModalityValues"
     query = Dict(
         _q[:collection] => collection,
@@ -66,11 +66,11 @@ function modalities(; collection = "", bodypart = "", format = _format)
 end
 
 """
-    bodyparts(; collection, modality, format = "csv")
+    tcia_bodyparts(; collection, modality, format = "csv")
 
 Returns the body parts examined in a given `collection` and/or by a given `modality`.
 """
-function bodyparts(; collection = "", modality = "", format = _format)
+function tcia_bodyparts(; collection = "", modality = "", format = _format)
     endpoint = "/getBodyPartValues"
     query = Dict(
         _q[:collection] => collection,
@@ -81,11 +81,11 @@ function bodyparts(; collection = "", modality = "", format = _format)
 end
 
 """
-    manufacturers(; collection, modality, bodypart, format = "csv")
+    tcia_manufacturers(; collection, modality, bodypart, format = "csv")
 
 Returns the hardware manufacturers for a given `collection` and/or `modality` and/or `bodypart`.
 """
-function manufacturers(; collection = "", modality = "",  bodypart = "", format = _format)
+function tcia_manufacturers(; collection = "", modality = "",  bodypart = "", format = _format)
     endpoint = "/getManufacturerValues"
     query = Dict(
         _q[:collection] => collection,
@@ -97,11 +97,11 @@ function manufacturers(; collection = "", modality = "",  bodypart = "", format 
 end
 
 """
-    patients(; collection, format = "csv")
+    tcia_patients(; collection, format = "csv")
 
 Returns the patients in a given `collection`.
 """
-function patients(; collection = "", format = _format)
+function tcia_patients(; collection = "", format = _format)
     endpoint = "/getPatient"
     query = Dict(
         _q[:collection] => collection,
@@ -111,11 +111,11 @@ function patients(; collection = "", format = _format)
 end
 
 """
-    patients(; collection, modality, format = "csv")
+    tcia_patients(; collection, modality, format = "csv")
 
 Returns the patients in a given `collection` and `modality` (both inputs required).
 """
-function patients_by_modality(; collection::AbstractString, modality::AbstractString, format = _format)
+function tcia_patients_by_modality(; collection::AbstractString, modality::AbstractString, format = _format)
     endpoint = "/PatientsByModality"
     query = Dict(
         _q[:collection] => collection,
@@ -126,11 +126,11 @@ function patients_by_modality(; collection::AbstractString, modality::AbstractSt
 end
 
 """
-    studies(; collection, patient, study, format = "csv")
+    tcia_studies(; collection, patient, study, format = "csv")
 
 Returns the patient studies for a given `collection` and/or `patient` and/or `study`.
 """
-function studies(; collection = "", patient = "", study = "", format = _format)
+function tcia_studies(; collection = "", patient = "", study = "", format = _format)
     endpoint = "/getPatientStudy"
     query = Dict(
         _q[:collection] => collection,
@@ -142,12 +142,12 @@ function studies(; collection = "", patient = "", study = "", format = _format)
 end
 
 """
-    series(; collection, bodypart, manufacturer, modality, model, patient, series, study, format = "csv")
+    tcia_series(; collection, bodypart, manufacturer, modality, model, patient, series, study, format = "csv")
 
 Returns series information for a given `collection`, `bodypart, `manufactuer`, `modality`,
     manufacturer `model, `patient`, SeriesInstanceUID `series`, or StudyInstanceUID `study`.
 """
-function series(; collection = "", bodypart = "", manufacturer = "", modality = "",
+function tcia_series(; collection = "", bodypart = "", manufacturer = "", modality = "",
                   model = "", patient = "", series = "", study = "", format = _format)
     endpoint = "/getSeries"
     query = Dict(
@@ -165,11 +165,11 @@ function series(; collection = "", bodypart = "", manufacturer = "", modality = 
 end
 
 """
-    series_size(; series, format = "csv")
+    tcia_series_size(; series, format = "csv")
 
 Returns the total byte size and the number of objects in the given SeriesInstanceUID `series`.
 """
-function series_size(; series::AbstractString, format = _format)
+function tcia_series_size(; series::AbstractString, format = _format)
     endpoint = "/getSeriesSize"
     query = Dict(
         _q[:series] => series,
@@ -179,11 +179,11 @@ function series_size(; series::AbstractString, format = _format)
 end
 
 """
-    sop(; series, format = "csv")
+    tcia_sop(; series, format = "csv")
 
 Returns the SOPInstanceUIDs for the given SeriesInstanceUID `series`.
 """
-function sop(; series::AbstractString, format = _format)
+function tcia_sop(; series::AbstractString, format = _format)
     endpoint = "/getSOPInstanceUIDs"
     query = Dict(
         _q[:series] => series,
@@ -193,11 +193,11 @@ function sop(; series::AbstractString, format = _format)
 end
 
 """
-    images(; series, file)
+    tcia_images(; series, file)
 
 Downloads the images for the given SeriesInstanceUID `series` as the given zip-file `file`.
 """
-function images(; series::AbstractString, file::AbstractString)
+function tcia_images(; series::AbstractString, file::AbstractString)
     endpoint = "/getImage"
     query = Dict(
         _q[:series] => series,
@@ -206,12 +206,12 @@ function images(; series::AbstractString, file::AbstractString)
 end
 
 """
-    single_image(; series, sop, file)
+    tcia_single_image(; series, sop, file)
 
 Downloads a single DICOM image for the given SeriesInstanceUID `series` and SOPInstanceUID `sop`.
     The DICOM file is saved as `file`.
 """
-function single_image(; series::AbstractString, sop::AbstractString, file::AbstractString)
+function tcia_single_image(; series::AbstractString, sop::AbstractString, file::AbstractString)
     endpoint = "/getSingleImage"
     query = Dict(
         _q[:series] => series,
@@ -220,7 +220,7 @@ function single_image(; series::AbstractString, sop::AbstractString, file::Abstr
     return request(endpoint, query, file = file)
 end
 
-function newpatients(; collection::AbstractString, date::AbstractString, format = _format)
+function tcia_newpatients(; collection::AbstractString, date::AbstractString, format = _format)
     endpoint = "/NewPatientsInCollection"
     query = Dict(
         _q[:collection] => collection,
@@ -231,12 +231,12 @@ function newpatients(; collection::AbstractString, date::AbstractString, format 
 end
 
 """
-    newstudies(; date, collection, patient, format = "csv")
+    tcia_newstudies(; date, collection, patient, format = "csv")
 
 Returns new studies for a given `collection` that were added after a given `date` formatted as `YYYY-MM-DD`.
     The `patient` ID can be optionally given.
 """
-function newstudies(; date::AbstractString, collection::AbstractString, patient = "", format = _format)
+function tcia_newstudies(; date::AbstractString, collection::AbstractString, patient = "", format = _format)
     endpoint = "/NewStudiesInPatientCollection"
     query = Dict(
         _q[:collection] => collection,

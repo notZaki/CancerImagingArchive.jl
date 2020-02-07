@@ -13,9 +13,9 @@ Imaging data can be downloaded either as a `.zip` file containing an imaging ser
 The SeriesInstanceUID is needed to download an imaging series. The below example selects one series from the [TCGA-THCA collection](https://wiki.cancerimagingarchive.net/display/Public/TCGA-THCA).
 
 ```@repl ex
-patient_studies = studies(collection = "TCGA-THCA")
+patient_studies = tcia_studies(collection = "TCGA-THCA")
 chosen_study = patient_studies.StudyInstanceUID[1]
-imaging_series = series(study = chosen_study)
+imaging_series = tcia_series(study = chosen_study)
 chosen_series = imaging_series.SeriesInstanceUID[1]
 ```
 
@@ -24,7 +24,7 @@ chosen_series = imaging_series.SeriesInstanceUID[1]
 Once the SeriesInstanceUID is known, the imaging data can be downloaded as a zip file by:
 ```@repl ex
 zip_file = "output_file.zip"; # Can also be a path
-images(series = chosen_series, file = zip_file)
+tcia_images(series = chosen_series, file = zip_file)
 ```
 
 ## Single image
@@ -35,7 +35,7 @@ To download a single image, both its SeriesInstanceUID and SOPInstanceUID must b
 Continuing from the previous example, if we only wanted to download the first image in `chosen_series`, then:
 
 ```@repl ex
-series_sops = sop(series = chosen_series)
+series_sops = tcia_sop(series = chosen_series)
 chosen_sop = series_sops.SOPInstanceUID[1]
 ```
 
@@ -45,7 +45,7 @@ Once the SeriesInstanceUID and SOPInstanceUID are known, the dicom file can be d
 
 ```@repl ex
 dicom_file = "output_file.dcm";
-single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
+tcia_single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
 ```
 
 ```@setup ex
