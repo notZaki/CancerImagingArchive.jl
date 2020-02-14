@@ -13,10 +13,6 @@ Once installed, the package can be loaded via
 julia> using CancerImagingArchive
 ```
 
-!!! note
-
-    This module uses simple names for its functions, e.g. `tcia_studies()`, `tcia_images()`, `tcia_patients()`.
-
 ## Usage
 
 The module contains about a dozen [Functions](@ref) and a guide with some examples is included in the next section.
