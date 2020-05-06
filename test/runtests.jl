@@ -42,11 +42,9 @@ end
 
 function find_names_in_csv(csv)
     names_in_csv = names(csv)
-    if :AnnotationsFlag in names_in_csv
-        # This field occurs in csv but not json, so remove it
-        select!(csv, Not([:AnnotationsFlag]))
-    end
-    return names(csv)
+    # AnnotationsFlag field exists in csv but not json, so remove it for comparisons
+    filter!(name -> name != "AnnotationsFlag", names_in_csv)
+    return names_in_csv
 end
 
 function find_names_in_json(json_array)
