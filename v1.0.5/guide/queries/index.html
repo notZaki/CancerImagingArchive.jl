@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Queries · CancerImagingArchive.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="CancerImagingArchive.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit">CancerImagingArchive.jl</span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction</a></li><li><span class="tocitem">Guide</span><ul><li><a class="tocitem" href="../formats/">Formats</a></li><li class="is-active"><a class="tocitem" href>Queries</a><ul class="internal"><li><a class="tocitem" href="#All-collections"><span>All collections</span></a></li><li><a class="tocitem" href="#Imaging-modalities"><span>Imaging modalities</span></a></li><li><a class="tocitem" href="#Anatomy/body-parts"><span>Anatomy/body parts</span></a></li><li><a class="tocitem" href="#Manufacturers"><span>Manufacturers</span></a></li><li><a class="tocitem" href="#Patients"><span>Patients</span></a></li><li><a class="tocitem" href="#Patient-studies"><span>Patient studies</span></a></li><li><a class="tocitem" href="#Imaging-series"><span>Imaging series</span></a></li><li><a class="tocitem" href="#Service-Object-Pairs-(SOP)"><span>Service-Object Pairs (SOP)</span></a></li></ul></li><li><a class="tocitem" href="../downloading/">Data Download</a></li></ul></li><li><a class="tocitem" href="../../functions/">Functions</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Guide</a></li><li class="is-active"><a href>Queries</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Queries</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/notZaki/CancerImagingArchive.jl/blob/master/docs/src/guide/queries.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Queries"><a class="docs-heading-anchor" href="#Queries">Queries</a><a id="Queries-1"></a><a class="docs-heading-anchor-permalink" href="#Queries" title="Permalink"></a></h1><p>Queries are useful for exploring the available imaging data. The general hierarchy of the cancer imaging archive (TCIA) is:</p><pre><code class="language-none">Collection -&gt; PatientID -&gt; StudyInstanceUID -&gt; SeriesInstanceUID -&gt; SOPInstanceUID</code></pre><p>To download images, the <code>SeriesInstanceUID</code> and/or <code>SOPInstanceUID</code> must be known. The query functions are meant to help identify the relevant unique identifiers (UIDs)</p><p>Detailed information is available in the TCIA&#39;s user guide which includes a <a href="https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface+%28REST+API%29+Usage+Guide">list of available query endpoints</a> and the <a href="https://wiki.cancerimagingarchive.net/display/Public/TCIA+API+Return+Values">type of information returned</a> by each query.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>As mentioned in the <a href="../formats/#Formats">Formats</a> section, each query returns either a DataFrame or a Dictionary Array. The current section will exclusively use the DataFrame output. That being said, a dictionary array can always be obtained by any of these functions by passing <code>format = &quot;json&quot;</code> as an input argument.</p></div></div><h2 id="All-collections"><a class="docs-heading-anchor" href="#All-collections">All collections</a><a id="All-collections-1"></a><a class="docs-heading-anchor-permalink" href="#All-collections" title="Permalink"></a></h2><p>The names of all available collections on TCIA is obtained by:</p><pre><code class="language-julia-repl">julia&gt; tcia_collections()
+105×1 DataFrame
+│ Row │ Collection              │
+│     │ String                  │
+├─────┼─────────────────────────┤
+│ 1   │ TCGA-GBM                │
+│ 2   │ LIDC-IDRI               │
+│ 3   │ BREAST-DIAGNOSIS        │
+│ 4   │ PROSTATE-MRI            │
+│ 5   │ PROSTATE-DIAGNOSIS      │
+│ 6   │ NaF PROSTATE            │
+│ 7   │ CT COLONOGRAPHY         │
+⋮
+│ 98  │ Pelvic-Reference-Data   │
+│ 99  │ HEAD-NECK-RADIOMICS-HN1 │
+│ 100 │ PDMR-292921-168-R       │
+│ 101 │ GBM-DSC-MRI-DRO         │
+│ 102 │ Prostate-MRI-US-Biopsy  │
+│ 103 │ DRO-Toolkit             │
+│ 104 │ COVID-19                │
+│ 105 │ COVID-19-AR             │</code></pre><h2 id="Imaging-modalities"><a class="docs-heading-anchor" href="#Imaging-modalities">Imaging modalities</a><a id="Imaging-modalities-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-modalities" title="Permalink"></a></h2><p>The imaging modalities in a specific collection and/or anatomy are listed by:</p><pre><code class="language-julia-repl">julia&gt; tcia_modalities(collection = &quot;TCGA-KIRP&quot;)
+3×1 DataFrame
+│ Row │ Modality │
+│     │ String   │
+├─────┼──────────┤
+│ 1   │ CT       │
+│ 2   │ MR       │
+│ 3   │ PT       │
+
+julia&gt; tcia_modalities(bodypart = &quot;BRAIN&quot;)
+5×1 DataFrame
+│ Row │ Modality │
+│     │ String   │
+├─────┼──────────┤
+│ 1   │ MR       │
+│ 2   │ SEG      │
+│ 3   │ CT       │
+│ 4   │ DX       │
+│ 5   │ PT       │
+
+julia&gt; tcia_modalities(collection = &quot;CPTAC-HNSCC&quot;, bodypart = &quot;HEAD&quot;)
+2×1 DataFrame
+│ Row │ Modality │
+│     │ String   │
+├─────┼──────────┤
+│ 1   │ CT       │
+│ 2   │ MR       │</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Capitalization matters when passing in arguments, i.e. <code>bodypart = &quot;BRAIN&quot;</code> works but passing <code>bodypart = &quot;brain&quot;</code> will return an empty object. However, there are some cases where different versions are valid. As an example, passing <code>bodypart = Kidney</code> or <code>bodypart = &quot;KIDNEY&quot;</code> will both return valid (but different!) results. So although fully-capitalized body part names will work most of the time, do double-check if alternative spellings exist when using the <code>bodypart</code> argument (see next section for names)</p></div></div><h2 id="Anatomy/body-parts"><a class="docs-heading-anchor" href="#Anatomy/body-parts">Anatomy/body parts</a><a id="Anatomy/body-parts-1"></a><a class="docs-heading-anchor-permalink" href="#Anatomy/body-parts" title="Permalink"></a></h2><p>The anatomy scanned in a specific collection and/or modality are listed by:</p><pre><code class="language-julia-repl">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-HNSCC&quot;)
+8×1 DataFrame
+│ Row │ BodyPartExamined │
+│     │ String?          │
+├─────┼──────────────────┤
+│ 1   │ missing          │
+│ 2   │ NECK             │
+│ 3   │ HEAD             │
+│ 4   │ HEADNECK         │
+│ 5   │ ABDOMEN          │
+│ 6   │ CHEST            │
+│ 7   │ CHEST_TO_PELVIS  │
+│ 8   │ Head-Neck        │
+
+julia&gt; tcia_bodyparts(modality = &quot;CT&quot;)
+65×1 DataFrame
+│ Row │ BodyPartExamined │
+│     │ String?          │
+├─────┼──────────────────┤
+│ 1   │ BRAIN            │
+│ 2   │ CHEST            │
+│ 3   │ BREAST           │
+│ 4   │ PROSTATE         │
+│ 5   │ COLON            │
+│ 6   │ missing          │
+│ 7   │ PHANTOM          │
+⋮
+│ 58  │ Head-Neck        │
+│ 59  │ PET_ABDOMEN_PEL  │
+│ 60  │ PET_CT SCAN CHE  │
+│ 61  │ THORAX           │
+│ 62  │ WHOLEBODY        │
+│ 63  │ CHESTABDOMEN     │
+│ 64  │ Thorax           │
+│ 65  │ THORAXABD        │
+
+julia&gt; tcia_bodyparts(collection = &quot;CPTAC-SAR&quot;, modality = &quot;MR&quot;)
+3×1 DataFrame
+│ Row │ BodyPartExamined │
+│     │ String?          │
+├─────┼──────────────────┤
+│ 1   │ missing          │
+│ 2   │ Pelvis           │
+│ 3   │ EXTREMITY        │
+
+julia&gt; tcia_bodyparts(collection = &quot;CPTAC-SAR&quot;, modality = &quot;CT&quot;)
+5×1 DataFrame
+│ Row │ BodyPartExamined │
+│     │ String?          │
+├─────┼──────────────────┤
+│ 1   │ missing          │
+│ 2   │ ABDOMEN          │
+│ 3   │ CHEST            │
+│ 4   │ WHOLEBODY        │
+│ 5   │ EXTREMITY        │</code></pre><h2 id="Manufacturers"><a class="docs-heading-anchor" href="#Manufacturers">Manufacturers</a><a id="Manufacturers-1"></a><a class="docs-heading-anchor-permalink" href="#Manufacturers" title="Permalink"></a></h2><p>A list of scanner manufacturers for a specific collection/modality/anatomy is obtained by</p><pre><code class="language-julia-repl">julia&gt; tcia_manufacturers(collection = &quot;TCGA-KICH&quot;)
+3×1 DataFrame
+│ Row │ Manufacturer       │
+│     │ String             │
+├─────┼────────────────────┤
+│ 1   │ GE MEDICAL SYSTEMS │
+│ 2   │ SIEMENS            │
+│ 3   │ TOSHIBA            │
+
+julia&gt; tcia_manufacturers(modality = &quot;CT&quot;)
+40×1 DataFrame
+│ Row │ Manufacturer                  │
+│     │ Union{Missing, String}        │
+├─────┼───────────────────────────────┤
+│ 1   │ missing                       │
+│ 2   │ GE MEDICAL SYSTEMS            │
+│ 3   │ SIEMENS                       │
+│ 4   │ TOSHIBA                       │
+│ 5   │ Philips                       │
+│ 6   │ Vital Images, Inc             │
+│ 7   │ Philips Medical Systems       │
+⋮
+│ 33  │ 002                           │
+│ 34  │ 003                 .419501   │
+│ 35  │ 003                           │
+│ 36  │ 004                           │
+│ 37  │ 004     313619.2.55.3.419501  │
+│ 38  │ 002     es scanned.ration     │
+│ 39  │ 005                           │
+│ 40  │ 005                         9 │
+
+julia&gt; tcia_manufacturers(bodypart = &quot;BREAST&quot;)
+10×1 DataFrame
+│ Row │ Manufacturer                │
+│     │ Union{Missing, String}      │
+├─────┼─────────────────────────────┤
+│ 1   │ Philips Medical Systems     │
+│ 2   │ GE MEDICAL SYSTEMS          │
+│ 3   │ LORAD                       │
+│ 4   │ Lorad, A Hologic Company    │
+│ 5   │ missing                     │
+│ 6   │ Confirma Inc.               │
+│ 7   │ SIEMENS                     │
+│ 8   │ Siemens                     │
+│ 9   │ GE MEDICAL SYSTEMS, NUCLEAR │
+│ 10  │ VICTRE                      │</code></pre><p>The same manufacturer can have different names, e.g. <code>Philips</code>/<code>Philips Medical Systems</code> and <code>SIEMENS</code>/<code>Siemens</code>.</p><h2 id="Patients"><a class="docs-heading-anchor" href="#Patients">Patients</a><a id="Patients-1"></a><a class="docs-heading-anchor-permalink" href="#Patients" title="Permalink"></a></h2><p>The patients in a given collection are listed by:</p><pre><code class="language-julia-repl">julia&gt; tcia_patients(collection = &quot;TCGA-SARC&quot;)
+5×4 DataFrame
+│ Row │ PatientID    │ PatientName  │ PatientSex │ Collection │
+│     │ String       │ String       │ String     │ String     │
+├─────┼──────────────┼──────────────┼────────────┼────────────┤
+│ 1   │ TCGA-QQ-A5V2 │ TCGA-QQ-A5V2 │ M          │ TCGA-SARC  │
+│ 2   │ TCGA-QQ-A5VC │ TCGA-QQ-A5VC │ F          │ TCGA-SARC  │
+│ 3   │ TCGA-QQ-A8VF │ TCGA-QQ-A8VF │ M          │ TCGA-SARC  │
+│ 4   │ TCGA-QQ-A8VH │ TCGA-QQ-A8VH │ F          │ TCGA-SARC  │
+│ 5   │ TCGA-QQ-A8VG │ TCGA-QQ-A8VG │ M          │ TCGA-SARC  │</code></pre><h3 id="Patients-for-specific-modality"><a class="docs-heading-anchor" href="#Patients-for-specific-modality">Patients for specific modality</a><a id="Patients-for-specific-modality-1"></a><a class="docs-heading-anchor-permalink" href="#Patients-for-specific-modality" title="Permalink"></a></h3><p>To get a patients for which a specific modality was used, a slightly different function is used:</p><pre><code class="language-julia-repl">julia&gt; tcia_patients_by_modality(collection = &quot;TCGA-SARC&quot;, modality = &quot;CT&quot;)
+4×3 DataFrame
+│ Row │ PatientID    │ Collection │ Modality │
+│     │ String       │ String     │ String   │
+├─────┼──────────────┼────────────┼──────────┤
+│ 1   │ TCGA-QQ-A5V2 │ TCGA-SARC  │ CT       │
+│ 2   │ TCGA-QQ-A5VC │ TCGA-SARC  │ CT       │
+│ 3   │ TCGA-QQ-A8VF │ TCGA-SARC  │ CT       │
+│ 4   │ TCGA-QQ-A8VG │ TCGA-SARC  │ CT       │
+
+julia&gt; tcia_patients_by_modality(collection = &quot;TCGA-SARC&quot;, modality = &quot;MR&quot;)
+2×3 DataFrame
+│ Row │ PatientID    │ Collection │ Modality │
+│     │ String       │ String     │ String   │
+├─────┼──────────────┼────────────┼──────────┤
+│ 1   │ TCGA-QQ-A8VF │ TCGA-SARC  │ MR       │
+│ 2   │ TCGA-QQ-A8VH │ TCGA-SARC  │ MR       │</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Although the functionality of <code>tcia_patients_by_modality()</code> could be combined into the <code>tcia_patients()</code> function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.</p></div></div><h3 id="Patients-added-after-specific-date"><a class="docs-heading-anchor" href="#Patients-added-after-specific-date">Patients added after specific date</a><a id="Patients-added-after-specific-date-1"></a><a class="docs-heading-anchor-permalink" href="#Patients-added-after-specific-date" title="Permalink"></a></h3><p>In large collections, it can be useful to query patients that were added after a date specified as YYYY-MM-DD. This is accomplished by:</p><pre><code class="language-julia-repl">julia&gt; tcia_newpatients(collection = &quot;TCGA-GBM&quot;, date = &quot;2015-01-01&quot;)
+104×2 DataFrame
+│ Row │ PatientID    │ Collection │
+│     │ String       │ String     │
+├─────┼──────────────┼────────────┤
+│ 1   │ TCGA-08-0355 │ TCGA-GBM   │
+│ 2   │ TCGA-08-0356 │ TCGA-GBM   │
+│ 3   │ TCGA-08-0359 │ TCGA-GBM   │
+│ 4   │ TCGA-08-0360 │ TCGA-GBM   │
+│ 5   │ TCGA-08-0385 │ TCGA-GBM   │
+│ 6   │ TCGA-08-0389 │ TCGA-GBM   │
+│ 7   │ TCGA-08-0390 │ TCGA-GBM   │
+⋮
+│ 97  │ TCGA-12-1598 │ TCGA-GBM   │
+│ 98  │ TCGA-12-3650 │ TCGA-GBM   │
+│ 99  │ TCGA-12-1098 │ TCGA-GBM   │
+│ 100 │ TCGA-12-1601 │ TCGA-GBM   │
+│ 101 │ TCGA-06-2570 │ TCGA-GBM   │
+│ 102 │ TCGA-06-5417 │ TCGA-GBM   │
+│ 103 │ TCGA-06-6389 │ TCGA-GBM   │
+│ 104 │ TCGA-06-1806 │ TCGA-GBM   │</code></pre><h2 id="Patient-studies"><a class="docs-heading-anchor" href="#Patient-studies">Patient studies</a><a id="Patient-studies-1"></a><a class="docs-heading-anchor-permalink" href="#Patient-studies" title="Permalink"></a></h2><p>A list of visits/studies for a given collection/patient is obtained by:</p><pre><code class="language-julia-repl">julia&gt; tcia_studies(collection = &quot;TCGA-THCA&quot;)
+7×9 DataFrame. Omitted printing of 5 columns
+│ Row │ Collection │ PatientID    │ PatientName  │ PatientSex │
+│     │ String     │ String       │ String       │ String     │
+├─────┼────────────┼──────────────┼──────────────┼────────────┤
+│ 1   │ TCGA-THCA  │ TCGA-DE-A4MD │ TCGA-DE-A4MD │ M          │
+│ 2   │ TCGA-THCA  │ TCGA-DE-A4MA │ TCGA-DE-A4MA │ F          │
+│ 3   │ TCGA-THCA  │ TCGA-DE-A4MA │ TCGA-DE-A4MA │ F          │
+│ 4   │ TCGA-THCA  │ TCGA-DE-A4MC │ TCGA-DE-A4MC │ F          │
+│ 5   │ TCGA-THCA  │ TCGA-DE-A4MB │ TCGA-DE-A4MB │ F          │
+│ 6   │ TCGA-THCA  │ TCGA-E3-A3DZ │ TCGA-E3-A3DZ │ F          │
+│ 7   │ TCGA-THCA  │ TCGA-E3-A3E5 │ TCGA-E3-A3E5 │ M          │
+
+julia&gt; tcia_studies(patient = &quot;TCGA-QQ-A8VF&quot;)
+2×9 DataFrame. Omitted printing of 5 columns
+│ Row │ Collection │ PatientID    │ PatientName  │ PatientSex │
+│     │ String     │ String       │ String       │ String     │
+├─────┼────────────┼──────────────┼──────────────┼────────────┤
+│ 1   │ TCGA-SARC  │ TCGA-QQ-A8VF │ TCGA-QQ-A8VF │ M          │
+│ 2   │ TCGA-SARC  │ TCGA-QQ-A8VF │ TCGA-QQ-A8VF │ M          │</code></pre><p>If the unique identifier (UID) for a study is known (a.k.a. StudyInstanceUID), then that can also be used</p><pre><code class="language-julia-repl">julia&gt; tcia_studies(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)
+1×9 DataFrame. Omitted printing of 5 columns
+│ Row │ Collection │ PatientID    │ PatientName  │ PatientSex │
+│     │ String     │ String       │ String       │ String     │
+├─────┼────────────┼──────────────┼──────────────┼────────────┤
+│ 1   │ TCGA-SARC  │ TCGA-QQ-A8VF │ TCGA-QQ-A8VF │ M          │</code></pre><h3 id="Patient-studies-added-after-specific-data"><a class="docs-heading-anchor" href="#Patient-studies-added-after-specific-data">Patient studies added after specific data</a><a id="Patient-studies-added-after-specific-data-1"></a><a class="docs-heading-anchor-permalink" href="#Patient-studies-added-after-specific-data" title="Permalink"></a></h3><p>A list of visits/studies that were added after some date, formatted by YYYY-MM-DD, can be obtained by:</p><pre><code class="language-julia-repl">julia&gt; tcia_newstudies(collection=&quot;TCGA-GBM&quot;, date=&quot;2015-01-01&quot;)
+106×3 DataFrame. Omitted printing of 2 columns
+│ Row │ StudyInstanceUID                                                 │
+│     │ String                                                           │
+├─────┼──────────────────────────────────────────────────────────────────┤
+│ 1   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.218361089000532962354851713589 │
+│ 2   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.232438853782668841142871631923 │
+│ 3   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.291982097074076414376657462951 │
+│ 4   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.775866763600199916309126131064 │
+│ 5   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.222434989025722161720779872375 │
+│ 6   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.155576204150333185525274253431 │
+│ 7   │ 1.3.6.1.4.1.14519.5.2.1.7695.4001.162486595336728686386525070636 │
+⋮
+│ 99  │ 1.3.6.1.4.1.14519.5.2.1.8862.4001.853973730099261399255070895330 │
+│ 100 │ 1.3.6.1.4.1.14519.5.2.1.8862.4001.119873216352344754496678099313 │
+│ 101 │ 1.3.6.1.4.1.14519.5.2.1.8862.4001.201486216522847049056957283859 │
+│ 102 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.763554173270318063812534542847 │
+│ 103 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.304604545029494418165835320551 │
+│ 104 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.296868957331552138094328434431 │
+│ 105 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.308657922884262137750855956361 │
+│ 106 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.207566576057862441493246578379 │</code></pre><h2 id="Imaging-series"><a class="docs-heading-anchor" href="#Imaging-series">Imaging series</a><a id="Imaging-series-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series" title="Permalink"></a></h2><p>Each patient study consists of one or more imaging series which can be obtained by:</p><pre><code class="language-julia-repl">julia&gt; tcia_series(collection = &quot;TCGA-THCA&quot;)
+28×16 DataFrame. Omitted printing of 15 columns
+│ Row │ PatientID    │
+│     │ String       │
+├─────┼──────────────┤
+│ 1   │ TCGA-DE-A4MD │
+│ 2   │ TCGA-DE-A4MD │
+│ 3   │ TCGA-DE-A4MA │
+│ 4   │ TCGA-DE-A4MA │
+│ 5   │ TCGA-DE-A4MA │
+│ 6   │ TCGA-DE-A4MA │
+│ 7   │ TCGA-DE-A4MA │
+⋮
+│ 21  │ TCGA-DE-A4MC │
+│ 22  │ TCGA-DE-A4MC │
+│ 23  │ TCGA-DE-A4MC │
+│ 24  │ TCGA-DE-A4MB │
+│ 25  │ TCGA-E3-A3DZ │
+│ 26  │ TCGA-E3-A3DZ │
+│ 27  │ TCGA-E3-A3E5 │
+│ 28  │ TCGA-E3-A3E5 │
+
+julia&gt; tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;)
+15×16 DataFrame. Omitted printing of 15 columns
+│ Row │ PatientID    │
+│     │ String       │
+├─────┼──────────────┤
+│ 1   │ TCGA-QQ-A8VF │
+│ 2   │ TCGA-QQ-A8VF │
+│ 3   │ TCGA-QQ-A8VF │
+│ 4   │ TCGA-QQ-A8VF │
+│ 5   │ TCGA-QQ-A8VF │
+│ 6   │ TCGA-QQ-A8VF │
+│ 7   │ TCGA-QQ-A8VF │
+│ 8   │ TCGA-QQ-A8VF │
+│ 9   │ TCGA-QQ-A8VF │
+│ 10  │ TCGA-QQ-A8VF │
+│ 11  │ TCGA-QQ-A8VF │
+│ 12  │ TCGA-QQ-A8VF │
+│ 13  │ TCGA-QQ-A8VF │
+│ 14  │ TCGA-QQ-A8VF │
+│ 15  │ TCGA-QQ-A8VF │
+
+julia&gt; tcia_series(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)
+6×16 DataFrame. Omitted printing of 15 columns
+│ Row │ PatientID    │
+│     │ String       │
+├─────┼──────────────┤
+│ 1   │ TCGA-QQ-A8VF │
+│ 2   │ TCGA-QQ-A8VF │
+│ 3   │ TCGA-QQ-A8VF │
+│ 4   │ TCGA-QQ-A8VF │
+│ 5   │ TCGA-QQ-A8VF │
+│ 6   │ TCGA-QQ-A8VF │
+
+julia&gt; tcia_series(modality = &quot;CT&quot;, manufacturer = &quot;TOSHIBA&quot;)
+1214×16 DataFrame. Omitted printing of 15 columns
+│ Row  │ PatientID            │
+│      │ String               │
+├──────┼──────────────────────┤
+│ 1    │ LIDC-IDRI-0104       │
+│ 2    │ LIDC-IDRI-0107       │
+│ 3    │ LIDC-IDRI-0151       │
+│ 4    │ LIDC-IDRI-0156       │
+│ 5    │ LIDC-IDRI-0310       │
+│ 6    │ LIDC-IDRI-0315       │
+│ 7    │ LIDC-IDRI-0334       │
+⋮
+│ 1207 │ COVID-19-AR-16445168 │
+│ 1208 │ COVID-19-AR-16445168 │
+│ 1209 │ COVID-19-AR-16445168 │
+│ 1210 │ COVID-19-AR-16445168 │
+│ 1211 │ COVID-19-AR-16445168 │
+│ 1212 │ COVID-19-AR-16445168 │
+│ 1213 │ COVID-19-AR-16445168 │
+│ 1214 │ COVID-19-AR-16445168 │
+
+julia&gt; tcia_series(bodypart = &quot;EXTREMITY&quot;)
+621×16 DataFrame. Omitted printing of 15 columns
+│ Row │ PatientID │
+│     │ String    │
+├─────┼───────────┤
+│ 1   │ STS_001   │
+│ 2   │ STS_001   │
+│ 3   │ STS_001   │
+│ 4   │ STS_001   │
+│ 5   │ STS_001   │
+│ 6   │ STS_001   │
+│ 7   │ STS_001   │
+⋮
+│ 614 │ C3L-02846 │
+│ 615 │ C3L-02846 │
+│ 616 │ C3L-02846 │
+│ 617 │ C3L-02846 │
+│ 618 │ C3L-02846 │
+│ 619 │ C3L-02846 │
+│ 620 │ C3L-02846 │
+│ 621 │ C3N-00875 │</code></pre><p>This query&#39;s importance is hinted by the smorgasbord of parameters it accepts.  That&#39;s because this query returns the <code>SeriesInstanceUID</code> which is needed to download images. Although the above examples only show <code>PatientID</code>, the query actually returns more information which is not shown because of limited screen space.  The complete list of columns are:</p><pre><code class="language-julia-repl">julia&gt; series_dataframe = tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;);
+
+julia&gt; names(series_dataframe)
+16-element Array{String,1}:
+ &quot;PatientID&quot;
+ &quot;StudyInstanceUID&quot;
+ &quot;SeriesInstanceUID&quot;
+ &quot;Modality&quot;
+ &quot;ProtocolName&quot;
+ &quot;SeriesDate&quot;
+ &quot;SeriesDescription&quot;
+ &quot;BodyPartExamined&quot;
+ &quot;SeriesNumber&quot;
+ &quot;AnnotationsFlag&quot;
+ &quot;Collection&quot;
+ &quot;Manufacturer&quot;
+ &quot;ManufacturerModelName&quot;
+ &quot;SoftwareVersions&quot;
+ &quot;Visibility&quot;
+ &quot;ImageCount&quot;</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The entire table could have been printed by:</p><pre><code class="language-julia">show(series_dataframe, allrows = true, allcols = true)</code></pre></div></div><div class="admonition is-warning"><header class="admonition-header">Warning</header><div class="admonition-body"><p>Passing <code>format = &quot;json&quot;</code> will result in one fewer column. This is because the <code>AnnotationsFlag</code> field is returned for CSV output but not for JSON. </p></div></div><h3 id="Imaging-series-size"><a class="docs-heading-anchor" href="#Imaging-series-size">Imaging series size</a><a id="Imaging-series-size-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series-size" title="Permalink"></a></h3><p>The size (in bytes) and number of images for a given imaging series is given by</p><pre><code class="language-julia-repl">julia&gt; tcia_series_size(series = &quot;1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948&quot;)
+1×2 DataFrame
+│ Row │ TotalSizeInBytes │ ObjectCount │
+│     │ Float64          │ Int64       │
+├─────┼──────────────────┼─────────────┤
+│ 1   │ 1.49149e8        │ 1120        │</code></pre><div class="admonition is-warning"><header class="admonition-header">Warning</header><div class="admonition-body"><p>It is recommended that <code>tcia_series_size()</code> should <strong>not</strong> be used with <code>format = json</code>. This is because the json version interprets the <code>TotalSizeInBytes</code> as string/text rather than a number.</p></div></div><h2 id="Service-Object-Pairs-(SOP)"><a class="docs-heading-anchor" href="#Service-Object-Pairs-(SOP)">Service-Object Pairs (SOP)</a><a id="Service-Object-Pairs-(SOP)-1"></a><a class="docs-heading-anchor-permalink" href="#Service-Object-Pairs-(SOP)" title="Permalink"></a></h2><p>Each imaging series consists of one or more images, each of which have a service-object-pair unique identifier (SOPInstanceUID). These can be listed by</p><pre><code class="language-julia-repl">julia&gt; tcia_sop(series = &quot;1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948&quot;)
+1120×1 DataFrame
+│ Row  │ SOPInstanceUID                                                   │
+│      │ String                                                           │
+├──────┼──────────────────────────────────────────────────────────────────┤
+│ 1    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.144018262636458572930176764010 │
+│ 2    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.154324108703255968081619601090 │
+│ 3    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.599091131190480435140295467926 │
+│ 4    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.188777989493136421598164072645 │
+│ 5    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.320926776031572167602265814085 │
+│ 6    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.112724040783164800754854122892 │
+│ 7    │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.191428415955329981952616210493 │
+⋮
+│ 1113 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.216754588853997343696538450924 │
+│ 1114 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.319332759706029416400995097296 │
+│ 1115 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.165979465460040197695092146160 │
+│ 1116 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.175785847532920059054266261284 │
+│ 1117 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.272387938688710785108532808119 │
+│ 1118 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.195096450043378492624813997806 │
+│ 1119 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.849941981930994444945059747092 │
+│ 1120 │ 1.3.6.1.4.1.14519.5.2.1.4591.4001.121399683271444137920842834255 │</code></pre><p>These identifiers are useful for accessing a specific image without having to download the entire imaging series.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../formats/">« Formats</a><a class="docs-footer-nextpage" href="../downloading/">Data Download »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Friday 24 July 2020 02:27">Friday 24 July 2020</span>. Using Julia version 1.0.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
