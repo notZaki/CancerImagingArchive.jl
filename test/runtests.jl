@@ -173,6 +173,15 @@ end
     @test filesize(dicom_file) == 980794
 end
 
+@testset "Download series" begin
+  series = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001")
+  seriesjs = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001", format="json") 
+  download_series(series, "./testdf")
+  download_series(seriesjs, "./testjs")
+  download_series(series, "./testdf"; overwrite = false)
+end
+
+
 @testset "Utilities - remove_empty!()" begin
     dict_potentialy_empty_values = Dict(1 => "", 2 => "hello", 3 => "b", 4 => "", 5 => "ye")
     CancerImagingArchive.remove_empty!(dict_potentialy_empty_values)

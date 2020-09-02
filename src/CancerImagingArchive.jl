@@ -2,6 +2,9 @@ module CancerImagingArchive
 
 using HTTP, CSV, DataFrames, JSON
 
+include("download_series.jl")
+export download_series
+
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, tcia_studies, tcia_series, tcia_series_size
 export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudies, tcia_sop
 export tcia_single_image, tcia_images
