@@ -8,6 +8,11 @@ function _initialize_destination(destination, overwrite)
     return destination
 end
 
+function _append_to_path(destination, append)
+  append = replace(append, r"[^0-9a-zA-Z]" => "")
+  return joinpath(destination, append)
+end
+
 function download_series(series_id::AbstractString, destination = "./", overwrite = true)
     _initialize_destination(destination, overwrite)
     zip_file = joinpath(destination, "downloaded.zip")
@@ -25,7 +30,7 @@ end
 function download_series(series::DataFrames.DataFrameRow, destination = "./"; append_desc = true, overwrite = true)
     series_id = series.SeriesInstanceUID
     if append_desc 
-        destination = joinpath(destination, series.SeriesDescription)
+        destination = _append_to_path(destination, series.SeriesDescription)
     end
     return download_series(series_id, destination, overwrite)
 end
@@ -33,7 +38,7 @@ end
 function download_series(series::Dict, destination = "./"; append_desc = true, overwrite = true)
     series_id = series["SeriesInstanceUID"]
     if append_desc 
-        destination = joinpath(destination, series["SeriesDescription"])
+        destination = _append_to_path(destination, series["SeriesDescription"])
     end
     return download_series(series_id, destination, overwrite)
 end
