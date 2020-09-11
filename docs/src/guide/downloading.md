@@ -27,6 +27,36 @@ zip_file = "output_file.zip"; # Can also be a path
 tcia_images(series = chosen_series, file = zip_file)
 ```
 
+### Convenience wrapper
+
+The above steps will only download a zip file which then has to be extracted. 
+This can be cumbersome when downloading multipled series, so the `download_series()` function is provided for convenience.
+
+!!! note
+
+    The `download_series()` assumes that the `unzip` utility is installed on the system. This can be verified by typing `unzip` in a terminal or `;unzip` in julia.
+    ```
+
+**Downloading a single series**
+
+The following will download and extract the `chosen_series` (selected above) and extract the images in the current directory `./`.
+```julia
+julia> download_series(chosen_series, "./")
+```
+
+**Downloading multiple series**
+
+The wrapper function can download multiple series from a Dataframe by
+```julia
+julia> series = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001")
+julia> download_series(series, "./testdf")
+```
+or from an array of dictionaries by
+```julia
+julia> seriesjs = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001", format="json") 
+julia> download_series(seriesjs, "./testjs")
+```
+
 ## Single image
 
 ### Selecting the single image
