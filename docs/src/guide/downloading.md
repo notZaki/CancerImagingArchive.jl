@@ -44,7 +44,9 @@ The following will download and extract the `chosen_series` (selected above) and
 julia> download_series(chosen_series, "./")
 ```
 
-Multiple series can be downloaded as well from a Dataframe by
+**Downloading multiple series**
+
+The wrapper function can download multiple series from a Dataframe by
 ```julia
 julia> series = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001")
 julia> download_series(series, "./testdf")
