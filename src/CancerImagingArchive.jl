@@ -11,7 +11,7 @@ export tcia_single_image, tcia_images
 export dataframe_to_csv, dictionary_to_json
 
 # const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
-const _host = "api.cancerimagingarchive.net/radiology"
+const _host = "services.cancerimagingarchive.net/services/v4/TCIA/query"
 const _format = "csv"
 const _q = Dict(
     :collection => "Collection",
@@ -270,7 +270,7 @@ has_format(query, format) = haskey(query, "format") && query["format"]==format
 
 function _request_csv(url)
     r = HTTP.request("GET", url)
-    return DataFrame!(CSV.File(r.body))
+    return DataFrame(CSV.File(r.body))
 end
 
 function _request_json(url)

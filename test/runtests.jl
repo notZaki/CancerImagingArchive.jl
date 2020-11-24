@@ -19,6 +19,10 @@ end
 function compare_csv_vs_json(csv, json; max_names = Inf)
     names_in_csv = find_names_in_csv(csv)
     names_in_json = find_names_in_json(json)
+    if any(isempty.(json))
+        println("Empty JSON detected")
+    end
+    json = filter(element -> !isempty(element), json)
     @test length(json) == length(csv[!, names_in_csv[1]])
     @test length(names_in_json) == length(names_in_csv)
     if length(names_in_json) > max_names
