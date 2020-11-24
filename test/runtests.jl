@@ -132,27 +132,27 @@ end
     @test length(tcia_newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) > 2
 end
 
-@testset "Queries - Series" begin
-    compare_csv_vs_json(
-        tcia_series(collection = "TCGA-THCA"),
-        tcia_series(collection = "TCGA-THCA", format = "json"), max_names = 3)
-    compare_csv_vs_json(
-        tcia_series(patient = "TCGA-QQ-A8VF"),
-        tcia_series(patient = "TCGA-QQ-A8VF", format = "json"), max_names = 3)
-    compare_csv_vs_json(
-        tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806"),
-        tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806", format = "json"), max_names = 3)
-    compare_csv_vs_json(
-        tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
-        tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
+# @testset "Queries - Series" begin
+#     compare_csv_vs_json(
+#         tcia_series(collection = "TCGA-THCA"),
+#         tcia_series(collection = "TCGA-THCA", format = "json"), max_names = 3)
+#     compare_csv_vs_json(
+#         tcia_series(patient = "TCGA-QQ-A8VF"),
+#         tcia_series(patient = "TCGA-QQ-A8VF", format = "json"), max_names = 3)
+#     compare_csv_vs_json(
+#         tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806"),
+#         tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806", format = "json"), max_names = 3)
+#     compare_csv_vs_json(
+#         tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
+#         tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
 
-    # Can not use compare_csv_vs_json() on tcia_series_size() because TotalSizeInBytes has different types
-    dce_series_json = tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
-    @test dce_series_json["TotalSizeInBytes"] == "149149266.000000"
-    dce_series_csv = tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
-    @test dce_series_csv.TotalSizeInBytes[1] ≈ 149149266
-    @test dce_series_csv.ObjectCount[1] == dce_series_json["ObjectCount"] == 1120
-end
+#     # Can not use compare_csv_vs_json() on tcia_series_size() because TotalSizeInBytes has different types
+#     dce_series_json = tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format="json")[1]
+#     @test dce_series_json["TotalSizeInBytes"] == "149149266.000000"
+#     dce_series_csv = tcia_series_size(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948")
+#     @test dce_series_csv.TotalSizeInBytes[1] ≈ 149149266
+#     @test dce_series_csv.ObjectCount[1] == dce_series_json["ObjectCount"] == 1120
+# end
 
 @testset "Queries - SOP" begin
     compare_csv_vs_json(
@@ -160,30 +160,30 @@ end
         tcia_sop(series = "1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948", format = "json"))
 end
 
-@testset "Data Download" begin
-    patient_studies = tcia_studies(collection = "TCGA-THCA")
-    chosen_study = patient_studies.StudyInstanceUID[1]
-    imaging_series = tcia_series(study = chosen_study)
-    chosen_series = imaging_series.SeriesInstanceUID[1]
-    series_sops = tcia_sop(series = chosen_series)
-    chosen_sop = series_sops.SOPInstanceUID[1]
+# @testset "Data Download" begin
+#     patient_studies = tcia_studies(collection = "TCGA-THCA")
+#     chosen_study = patient_studies.StudyInstanceUID[1]
+#     imaging_series = tcia_series(study = chosen_study)
+#     chosen_series = imaging_series.SeriesInstanceUID[1]
+#     series_sops = tcia_sop(series = chosen_series)
+#     chosen_sop = series_sops.SOPInstanceUID[1]
 
-    tcia_images(series = chosen_series, file = zip_file)
-    @test isfile(zip_file)
-    @test filesize(zip_file) == 945849
+#     tcia_images(series = chosen_series, file = zip_file)
+#     @test isfile(zip_file)
+#     @test filesize(zip_file) == 945849
 
-    tcia_single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
-    @test isfile(dicom_file)
-    @test filesize(dicom_file) == 980794
-end
+#     tcia_single_image(series = chosen_series, sop = chosen_sop, file = dicom_file)
+#     @test isfile(dicom_file)
+#     @test filesize(dicom_file) == 980794
+# end
 
-@testset "Download series" begin
-  series = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001")
-  seriesjs = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001", format="json") 
-  download_series(series, "./testdf")
-  download_series(seriesjs, "./testjs")
-  download_series(series, "./testdf"; overwrite = false)
-end
+# @testset "Download series" begin
+#   series = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001")
+#   seriesjs = tcia_series(collection = "AAPM-RT-MAC", patient = "RTMAC-LIVE-001", format="json") 
+#   download_series(series, "./testdf")
+#   download_series(seriesjs, "./testjs")
+#   download_series(series, "./testdf"; overwrite = false)
+# end
 
 
 @testset "Utilities - remove_empty!()" begin
