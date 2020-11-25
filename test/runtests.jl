@@ -194,7 +194,7 @@ end
         @test !isempty(value)
         push!(nonempty_keys, key)
     end
-    @test nonempty_keys == [2, 3, 5]
+    @test sort(nonempty_keys) == [2, 3, 5]
 end
 
 @testset "Utilities - Data writer" begin
