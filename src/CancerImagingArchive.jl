@@ -10,8 +10,8 @@ export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudi
 export tcia_single_image, tcia_images
 export dataframe_to_csv, dictionary_to_json
 
-# const _host = "services.cancerimagingarchive.net/services/v3/TCIA/query"
 const _host = "services.cancerimagingarchive.net/services/v4/TCIA/query"
+const _host_for_series = "services.cancerimagingarchive.net/services/v3/TCIA/query"
 const _format = "csv"
 const _q = Dict(
     :collection => "Collection",
@@ -164,7 +164,7 @@ function tcia_series(; collection = "", bodypart = "", manufacturer = "", modali
         _q[:study] => study,
         _q[:format] => format
     )
-    return request(endpoint, query)
+    return request(endpoint, query; host = _host_for_series)
 end
 
 """
@@ -250,9 +250,9 @@ function tcia_newstudies(; date::AbstractString, collection::AbstractString, pat
     return request(endpoint, query)
 end
 
-function request(endpoint, query; file="")
+function request(endpoint, query; file="", host = _host)
     remove_empty!(query)
-    uri = HTTP.URI(scheme="https", host=_host, path=endpoint, query=query)
+    uri = HTTP.URI(scheme="https", host=host, path=endpoint, query=query)
     @assert HTTP.isvalid(uri) "Invalid URI: $(uri)"
     url = string(uri)
     if has_format(query, "csv")
@@ -275,7 +275,8 @@ end
 
 function _request_json(url)
     r = HTTP.request("GET", url)
-    return JSON.Parser.parse(String(r.body))
+    json = JSON.Parser.parse(String(r.body))
+    return filter(element -> !isempty(element), json)
 end
 
 function _request_image(url, file)
