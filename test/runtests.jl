@@ -133,9 +133,6 @@ end
         tcia_series(collection = "TCGA-THCA"),
         tcia_series(collection = "TCGA-THCA", format = "json"), max_names = 3)
     compare_csv_vs_json(
-        tcia_series(patient = "TCGA-QQ-A8VF"),
-        tcia_series(patient = "TCGA-QQ-A8VF", format = "json"), max_names = 3)
-    compare_csv_vs_json(
         tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806"),
         tcia_series(study = "1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806", format = "json"), max_names = 3)
     compare_csv_vs_json(

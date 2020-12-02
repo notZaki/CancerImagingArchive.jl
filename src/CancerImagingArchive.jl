@@ -11,7 +11,6 @@ export tcia_single_image, tcia_images
 export dataframe_to_csv, dictionary_to_json
 
 const _host = "services.cancerimagingarchive.net/services/v4/TCIA/query"
-const _host_for_series = "services.cancerimagingarchive.net/services/v3/TCIA/query"
 const _format = "csv"
 const _q = Dict(
     :collection => "Collection",
@@ -164,7 +163,7 @@ function tcia_series(; collection = "", bodypart = "", manufacturer = "", modali
         _q[:study] => study,
         _q[:format] => format
     )
-    return request(endpoint, query; host = _host_for_series)
+    return request(endpoint, query)
 end
 
 """
