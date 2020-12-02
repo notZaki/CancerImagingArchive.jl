@@ -238,113 +238,94 @@ julia&gt; tcia_studies(patient = &quot;TCGA-QQ-A8VF&quot;)
  105 │ 1.3.6.1.4.1.14519.5.2.1.4591.400…  TCGA-06-1806  TCGA-GBM
  106 │ 1.3.6.1.4.1.14519.5.2.1.4591.400…  TCGA-06-1806  TCGA-GBM
                                                     91 rows omitted</code></pre><h2 id="Imaging-series"><a class="docs-heading-anchor" href="#Imaging-series">Imaging series</a><a id="Imaging-series-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series" title="Permalink"></a></h2><p>Each patient study consists of one or more imaging series which can be obtained by:</p><pre><code class="language-julia-repl">julia&gt; tcia_series(collection = &quot;TCGA-THCA&quot;)
-28×15 DataFrame
- Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
-     │ String                             String                             S ⋯
+28×16 DataFrame
+ Row │ PatientID     StudyInstanceUID                   SeriesInstanceUID      ⋯
+     │ String        String                             String                 ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C ⋯
-   2 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
-   3 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
-   4 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
-   5 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C ⋯
-   6 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
-   7 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P
-   8 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P
-  ⋮  │                 ⋮                                  ⋮                    ⋱
-  22 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C ⋯
-  23 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
-  24 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
-  25 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.1.3023.401…  C
-  26 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.1.3023.401…  C ⋯
-  27 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.1.3023.401…  C
-  28 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.1.3023.401…  C
-                                                  13 columns and 13 rows omitted
+   1 │ TCGA-DE-A4MD  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2. ⋯
+   2 │ TCGA-DE-A4MD  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+   3 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+   4 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+   5 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2. ⋯
+   6 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+   7 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+   8 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+  ⋮  │      ⋮                        ⋮                                  ⋮      ⋱
+  22 │ TCGA-DE-A4MC  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2. ⋯
+  23 │ TCGA-DE-A4MC  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+  24 │ TCGA-DE-A4MB  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
+  25 │ TCGA-E3-A3DZ  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.
+  26 │ TCGA-E3-A3DZ  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2. ⋯
+  27 │ TCGA-E3-A3E5  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.
+  28 │ TCGA-E3-A3E5  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.
+                                                  14 columns and 13 rows omitted
 
 julia&gt; tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;)
-15×15 DataFrame
- Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
-     │ String                             String                             S ⋯
+15×16 DataFrame
+ Row │ PatientID     StudyInstanceUID                   SeriesInstanceUID      ⋯
+     │ String        String                             String                 ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M ⋯
-   2 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
-   3 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
-   4 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
-   5 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M ⋯
-   6 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
-   7 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
-   8 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
-   9 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M ⋯
-  10 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-  11 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-  12 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-  13 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C ⋯
-  14 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-  15 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-                                                              13 columns omitted
+   1 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
+   2 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   3 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   4 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   5 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
+   6 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   7 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   8 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   9 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
+  10 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+  11 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+  12 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+  13 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
+  14 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+  15 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+                                                              14 columns omitted
 
 julia&gt; tcia_series(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)
-6×15 DataFrame
- Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
-     │ String                             String                             S ⋯
+6×16 DataFrame
+ Row │ PatientID     StudyInstanceUID                   SeriesInstanceUID      ⋯
+     │ String        String                             String                 ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C ⋯
-   2 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-   3 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-   4 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-   5 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C ⋯
-   6 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
-                                                              13 columns omitted
+   1 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
+   2 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   3 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   4 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+   5 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
+   6 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
+                                                              14 columns omitted
 
 julia&gt; tcia_series(modality = &quot;CT&quot;, manufacturer = &quot;TOSHIBA&quot;)
-1214×15 DataFrame
-  Row │ SeriesInstanceUID                  StudyInstanceUID                    ⋯
-      │ String                             String                              ⋯
-──────┼─────────────────────────────────────────────────────────────────────────
-    1 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…   ⋯
-    2 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
-    3 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
-    4 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
-    5 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…   ⋯
-    6 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
-    7 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
-    8 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
-  ⋮   │                 ⋮                                  ⋮                   ⋱
- 1208 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…   ⋯
- 1209 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…
- 1210 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…
- 1211 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…
- 1212 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…   ⋯
- 1213 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…
- 1214 │ 1.3.6.1.4.1.14519.5.2.1.9999.103…  1.3.6.1.4.1.14519.5.2.1.9999.103…
-                                                13 columns and 1199 rows omitted
+0×16 DataFrame
 
 julia&gt; tcia_series(bodypart = &quot;EXTREMITY&quot;)
-621×15 DataFrame
- Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
-     │ String                             String                             S ⋯
+621×16 DataFrame
+ Row │ PatientID  StudyInstanceUID                   SeriesInstanceUID         ⋯
+     │ String     String                             String                    ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  C ⋯
-   2 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
-   3 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
-   4 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  P
-   5 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  M ⋯
-   6 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  M
-   7 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
-   8 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
-  ⋮  │                 ⋮                                  ⋮                    ⋱
- 615 │ 1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6450.262…  M ⋯
- 616 │ 1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6450.262…  M
- 617 │ 1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6450.262…  M
- 618 │ 1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6450.262…  M
- 619 │ 1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6450.262…  M ⋯
- 620 │ 1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6450.262…  M
- 621 │ 1.3.6.1.4.1.14519.5.2.1.3320.327…  1.3.6.1.4.1.14519.5.2.1.3320.327…  C
-                                                 13 columns and 606 rows omitted</code></pre><p>This query&#39;s importance is hinted by the smorgasbord of parameters it accepts.  That&#39;s because this query returns the <code>SeriesInstanceUID</code> which is needed to download images. Although the above examples only show <code>PatientID</code>, the query actually returns more information which is not shown because of limited screen space.  The complete list of columns are:</p><pre><code class="language-julia-repl">julia&gt; series_dataframe = tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;);
+   1 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5 ⋯
+   2 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5
+   3 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5
+   4 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5
+   5 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5 ⋯
+   6 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5
+   7 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5
+   8 │ STS_001    1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5
+  ⋮  │     ⋮                      ⋮                                  ⋮         ⋱
+ 615 │ C3L-02846  1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6 ⋯
+ 616 │ C3L-02846  1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6
+ 617 │ C3L-02846  1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6
+ 618 │ C3L-02846  1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6
+ 619 │ C3L-02846  1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6 ⋯
+ 620 │ C3L-02846  1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.2.1.6
+ 621 │ C3N-00875  1.3.6.1.4.1.14519.5.2.1.3320.327…  1.3.6.1.4.1.14519.5.2.1.3
+                                                 14 columns and 606 rows omitted</code></pre><p>This query&#39;s importance is hinted by the smorgasbord of parameters it accepts.  That&#39;s because this query returns the <code>SeriesInstanceUID</code> which is needed to download images. Although the above examples only show <code>PatientID</code>, the query actually returns more information which is not shown because of limited screen space.  The complete list of columns are:</p><pre><code class="language-julia-repl">julia&gt; series_dataframe = tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;);
 
 julia&gt; names(series_dataframe)
-15-element Array{String,1}:
- &quot;SeriesInstanceUID&quot;
+16-element Array{String,1}:
+ &quot;PatientID&quot;
  &quot;StudyInstanceUID&quot;
+ &quot;SeriesInstanceUID&quot;
  &quot;Modality&quot;
  &quot;ProtocolName&quot;
  &quot;SeriesDate&quot;
@@ -383,4 +364,4 @@ julia&gt; names(series_dataframe)
  1118 │ 1.3.6.1.4.1.14519.5.2.1.4591.400…
  1119 │ 1.3.6.1.4.1.14519.5.2.1.4591.400…
  1120 │ 1.3.6.1.4.1.14519.5.2.1.4591.400…
-                         1105 rows omitted</code></pre><p>These identifiers are useful for accessing a specific image without having to download the entire imaging series.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../formats/">« Formats</a><a class="docs-footer-nextpage" href="../downloading/">Data Download »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 26 November 2020 03:38">Thursday 26 November 2020</span>. Using Julia version 1.5.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+                         1105 rows omitted</code></pre><p>These identifiers are useful for accessing a specific image without having to download the entire imaging series.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../formats/">« Formats</a><a class="docs-footer-nextpage" href="../downloading/">Data Download »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Wednesday 2 December 2020 21:48">Wednesday 2 December 2020</span>. Using Julia version 1.5.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
