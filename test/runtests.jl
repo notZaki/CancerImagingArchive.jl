@@ -72,18 +72,18 @@ end
 end
 
 @testset "Queries - Modalities" begin
-    @test length( tcia_modalities(collection = "TCGA-GBM", format = "json") ) > 2
+    @test length( tcia_modalities(collection = "TCGA-SARC", format = "json") ) >= 2
     @test length( tcia_modalities(bodypart = "BREAST", format = "json") ) > 5
     compare_csv_vs_json(
-        tcia_modalities(collection = "TCGA-GBM", bodypart = "BRAIN"),
-        tcia_modalities(collection = "TCGA-GBM", bodypart = "BRAIN", format = "json"))
+        tcia_modalities(collection = "TCGA-SARC", bodypart = "LEG"),
+        tcia_modalities(collection = "TCGA-SARC", bodypart = "LEG", format = "json"))
 end
 
 @testset "Queries - BodyParts" begin
     @test "BRAIN" in tcia_bodyparts(modality = "MR").BodyPartExamined
     compare_csv_vs_json(
-        tcia_bodyparts(collection = "CPTAC-HNSCC"),
-        tcia_bodyparts(collection = "CPTAC-HNSCC", format = "json"))
+        tcia_bodyparts(collection = "TCGA-SARC"),
+        tcia_bodyparts(collection = "TCGA-SARC", format = "json"))
 end
 
 @testset "Queries - Manufacturers" begin
@@ -106,8 +106,8 @@ end
     @test found_patient.PatientID[1] == "ACRIN-FLT-Breast_066"
 
     # Following criteria should find at least two patients
-    new_gbm_patients = tcia_newpatients(collection = "TCGA-GBM", date = "2015-01-01", format = "json")
-    @test length(new_gbm_patients) > 1
+    new_patients = tcia_newpatients(collection = "TCGA-KIRP", date = "2015-01-01", format = "json")
+    @test length(new_patients) > 1
 end
 
 @testset "Queries - Studies" begin
@@ -124,8 +124,8 @@ end
         studies_csv,
         tcia_studies(collection = "TCGA-SARC", format = "json"))
 
-    # Following criteria should find at least three series
-    @test length(tcia_newstudies(collection="TCGA-GBM", date="2015-01-01", format="json")) > 2
+    # Following criteria should find at least two series
+    @test length(tcia_newstudies(collection="TCGA-KIRP", date="2015-01-01", format="json")) >= 2
 end
 
 @testset "Queries - Series" begin
