@@ -254,6 +254,7 @@ function request(endpoint, query; file="", host = _host)
     uri = HTTP.URI(scheme="https", host=host, path=endpoint, query=query)
     @assert HTTP.isvalid(uri) "Invalid URI: $(uri)"
     url = string(uri)
+    @debug "$url" 
     if has_format(query, "csv")
         return _request_csv(url)
     elseif has_format(query, "json")
