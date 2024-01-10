@@ -10,7 +10,8 @@ export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudi
 export tcia_single_image, tcia_images
 export dataframe_to_csv, dictionary_to_json
 
-const _host = "services.cancerimagingarchive.net/services/v4/TCIA/query"
+# const _host = "services.cancerimagingarchive.net/services/v4/TCIA/query"
+const _host = "services.cancerimagingarchive.net/nbia-api/services/v1"
 const _format = "csv"
 const _q = Dict(
     :collection => "Collection",
@@ -118,7 +119,7 @@ end
 Returns the patients in a given `collection` and `modality` (both inputs required).
 """
 function tcia_patients_by_modality(; collection::AbstractString, modality::AbstractString, format = _format)
-    endpoint = "/PatientsByModality"
+    endpoint = "/getPatientByCollectionAndModality"
     query = Dict(
         _q[:collection] => collection,
         _q[:modality] => modality,
