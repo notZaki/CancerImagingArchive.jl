@@ -1,229 +1,588 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Queries · CancerImagingArchive.jl</title><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="CancerImagingArchive.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CancerImagingArchive.jl</a></span></div><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction</a></li><li><span class="tocitem">Guide</span><ul><li><a class="tocitem" href="../formats/">Formats</a></li><li class="is-active"><a class="tocitem" href>Queries</a><ul class="internal"><li><a class="tocitem" href="#All-collections"><span>All collections</span></a></li><li><a class="tocitem" href="#Imaging-modalities"><span>Imaging modalities</span></a></li><li><a class="tocitem" href="#Anatomy/body-parts"><span>Anatomy/body parts</span></a></li><li><a class="tocitem" href="#Manufacturers"><span>Manufacturers</span></a></li><li><a class="tocitem" href="#Patients"><span>Patients</span></a></li><li><a class="tocitem" href="#Patient-studies"><span>Patient studies</span></a></li><li><a class="tocitem" href="#Imaging-series"><span>Imaging series</span></a></li><li><a class="tocitem" href="#Service-Object-Pairs-(SOP)"><span>Service-Object Pairs (SOP)</span></a></li></ul></li><li><a class="tocitem" href="../downloading/">Data Download</a></li></ul></li><li><a class="tocitem" href="../../functions/">Functions</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Guide</a></li><li class="is-active"><a href>Queries</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Queries</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/notZaki/CancerImagingArchive.jl/blob/master/docs/src/guide/queries.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Queries"><a class="docs-heading-anchor" href="#Queries">Queries</a><a id="Queries-1"></a><a class="docs-heading-anchor-permalink" href="#Queries" title="Permalink"></a></h1><p>Queries are useful for exploring the available imaging data. The general hierarchy of the cancer imaging archive (TCIA) is:</p><pre><code class="nohighlight hljs">Collection -&gt; PatientID -&gt; StudyInstanceUID -&gt; SeriesInstanceUID -&gt; SOPInstanceUID</code></pre><p>To download images, the <code>SeriesInstanceUID</code> and/or <code>SOPInstanceUID</code> must be known. The query functions are meant to help identify the relevant unique identifiers (UIDs)</p><p>Detailed information is available in the TCIA&#39;s user guide which includes a <a href="https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface+%28REST+API%29+Usage+Guide">list of available query endpoints</a> and the <a href="https://wiki.cancerimagingarchive.net/display/Public/TCIA+API+Return+Values">type of information returned</a> by each query.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>As mentioned in the <a href="../formats/#Formats">Formats</a> section, each query returns either a DataFrame or a Dictionary Array. The current section will exclusively use the DataFrame output. That being said, a dictionary array can always be obtained by any of these functions by passing <code>format = &quot;json&quot;</code> as an input argument.</p></div></div><h2 id="All-collections"><a class="docs-heading-anchor" href="#All-collections">All collections</a><a id="All-collections-1"></a><a class="docs-heading-anchor-permalink" href="#All-collections" title="Permalink"></a></h2><p>The names of all available collections on TCIA is obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_collections()</code><code class="nohighlight hljs ansi" style="display:block;">109×1 DataFrame
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Queries · CancerImagingArchive.jl</title><meta name="title" content="Queries · CancerImagingArchive.jl"/><meta property="og:title" content="Queries · CancerImagingArchive.jl"/><meta property="twitter:title" content="Queries · CancerImagingArchive.jl"/><meta name="description" content="Documentation for CancerImagingArchive.jl."/><meta property="og:description" content="Documentation for CancerImagingArchive.jl."/><meta property="twitter:description" content="Documentation for CancerImagingArchive.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="CancerImagingArchive.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CancerImagingArchive.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Introduction</a></li><li><span class="tocitem">Guide</span><ul><li><a class="tocitem" href="../formats/">Formats</a></li><li class="is-active"><a class="tocitem" href>Queries</a><ul class="internal"><li><a class="tocitem" href="#All-collections"><span>All collections</span></a></li><li><a class="tocitem" href="#Imaging-modalities"><span>Imaging modalities</span></a></li><li><a class="tocitem" href="#Anatomy/body-parts"><span>Anatomy/body parts</span></a></li><li><a class="tocitem" href="#Manufacturers"><span>Manufacturers</span></a></li><li><a class="tocitem" href="#Patients"><span>Patients</span></a></li><li><a class="tocitem" href="#Patient-studies"><span>Patient studies</span></a></li><li><a class="tocitem" href="#Imaging-series"><span>Imaging series</span></a></li><li><a class="tocitem" href="#Service-Object-Pairs-(SOP)"><span>Service-Object Pairs (SOP)</span></a></li></ul></li><li><a class="tocitem" href="../downloading/">Data Download</a></li></ul></li><li><a class="tocitem" href="../../functions/">Functions</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Guide</a></li><li class="is-active"><a href>Queries</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Queries</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/notZaki/CancerImagingArchive.jl/blob/master/docs/src/guide/queries.md#L" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Queries"><a class="docs-heading-anchor" href="#Queries">Queries</a><a id="Queries-1"></a><a class="docs-heading-anchor-permalink" href="#Queries" title="Permalink"></a></h1><p>Queries are useful for exploring the available imaging data. The general hierarchy of the cancer imaging archive (TCIA) is:</p><pre><code class="nohighlight hljs">Collection -&gt; PatientID -&gt; StudyInstanceUID -&gt; SeriesInstanceUID -&gt; SOPInstanceUID</code></pre><p>To download images, the <code>SeriesInstanceUID</code> and/or <code>SOPInstanceUID</code> must be known. The query functions are meant to help identify the relevant unique identifiers (UIDs)</p><p>Detailed information is available in the TCIA&#39;s user guide which includes a <a href="https://wiki.cancerimagingarchive.net/display/Public/TCIA+Programmatic+Interface+%28REST+API%29+Usage+Guide">list of available query endpoints</a> and the <a href="https://wiki.cancerimagingarchive.net/display/Public/TCIA+API+Return+Values">type of information returned</a> by each query.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>As mentioned in the <a href="../formats/#Formats">Formats</a> section, each query returns either a DataFrame or a Dictionary Array. The current section will exclusively use the DataFrame output. That being said, a dictionary array can always be obtained by any of these functions by passing <code>format = &quot;json&quot;</code> as an input argument.</p></div></div><h2 id="All-collections"><a class="docs-heading-anchor" href="#All-collections">All collections</a><a id="All-collections-1"></a><a class="docs-heading-anchor-permalink" href="#All-collections" title="Permalink"></a></h2><p>The names of all available collections on TCIA is obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_collections()</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">123×1 DataFrame
  Row │ Collection
-     │ String31
+     │<span class="sgr90"> String31
 ─────┼───────────────────────────────
-   1 │ LIDC-IDRI
-   2 │ BREAST-DIAGNOSIS
-   3 │ PROSTATE-MRI
-   4 │ QIN-BREAST
-   5 │ PROSTATE-DIAGNOSIS
-   6 │ NaF PROSTATE
-   7 │ TCGA-BRCA
-   8 │ Phantom FDA
+   1 │ 4D-Lung
+   2 │ ACRIN-6698
+   3 │ ACRIN-Contralateral-Breast-MR
+   4 │ ACRIN-FLT-Breast
+   5 │ ACRIN-NSCLC-FDG-PET
+   6 │ Adrenal-ACC-Ki67-Seg
+   7 │ Anti-PD-1_Lung
+   8 │ B-mode-and-CEUS-Liver
   ⋮  │               ⋮
- 103 │ TCGA-THCA
- 104 │ TCGA-UCEC
- 105 │ TCGA-SARC
- 106 │ TCGA-STAD
- 107 │ VICTRE
- 108 │ covid-19
- 109 │ Training-Pseudo
-                      94 rows omitted</code></pre><h2 id="Imaging-modalities"><a class="docs-heading-anchor" href="#Imaging-modalities">Imaging modalities</a><a id="Imaging-modalities-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-modalities" title="Permalink"></a></h2><p>The imaging modalities in a specific collection and/or anatomy are listed by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_modalities(collection = &quot;TCGA-KIRP&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">3×1 DataFrame
+ 117 │ TCGA-STAD
+ 118 │ TCGA-THCA
+ 119 │ TCGA-UCEC
+ 120 │ UPENN-GBM
+ 121 │ VICTRE
+ 122 │ Vestibular-Schwannoma-MC-RC
+ 123 │ Vestibular-Schwannoma-SEG
+</span><span class="sgr36">                     108 rows omitted</span></span></code></pre><h2 id="Imaging-modalities"><a class="docs-heading-anchor" href="#Imaging-modalities">Imaging modalities</a><a id="Imaging-modalities-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-modalities" title="Permalink"></a></h2><p>The imaging modalities in a specific collection and/or anatomy are listed by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_modalities(collection = &quot;TCGA-KIRP&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">3×1 DataFrame
  Row │ Modality
-     │ String3
+     │<span class="sgr90"> String3
 ─────┼──────────
    1 │ CT
    2 │ MR
-   3 │ PT</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_modalities(bodypart = &quot;BRAIN&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">1×1 DataFrame
+   3 │ PT</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_modalities(bodypart = &quot;BRAIN&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">2×1 DataFrame
  Row │ Modality
-     │ String3
+     │<span class="sgr90"> String3
 ─────┼──────────
-   1 │ MR</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_modalities(collection = &quot;CPTAC-HNSCC&quot;, bodypart = &quot;HEAD&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×1 DataFrame</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Capitalization matters when passing in arguments, i.e. <code>bodypart = &quot;BRAIN&quot;</code> works but passing <code>bodypart = &quot;brain&quot;</code> will return an empty object. However, there are some cases where different versions are valid. As an example, passing <code>bodypart = Kidney</code> or <code>bodypart = &quot;KIDNEY&quot;</code> will both return valid (but different!) results. So although fully-capitalized body part names will work most of the time, do double-check if alternative spellings exist when using the <code>bodypart</code> argument (see next section for names)</p></div></div><h2 id="Anatomy/body-parts"><a class="docs-heading-anchor" href="#Anatomy/body-parts">Anatomy/body parts</a><a id="Anatomy/body-parts-1"></a><a class="docs-heading-anchor-permalink" href="#Anatomy/body-parts" title="Permalink"></a></h2><p>The anatomy scanned in a specific collection and/or modality are listed by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-HNSCC&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×1 DataFrame</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">58×1 DataFrame
+   1 │ MR
+   2 │ SEG</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_modalities(collection = &quot;CPTAC-HNSCC&quot;, bodypart = &quot;HEAD&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">0×0 DataFrame</span></code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Capitalization matters when passing in arguments, i.e. <code>bodypart = &quot;BRAIN&quot;</code> works but passing <code>bodypart = &quot;brain&quot;</code> will return an empty object. However, there are some cases where different versions are valid. As an example, passing <code>bodypart = Kidney</code> or <code>bodypart = &quot;KIDNEY&quot;</code> will both return valid (but different!) results. So although fully-capitalized body part names will work most of the time, do double-check if alternative spellings exist when using the <code>bodypart</code> argument (see next section for names)</p></div></div><h2 id="Anatomy/body-parts"><a class="docs-heading-anchor" href="#Anatomy/body-parts">Anatomy/body parts</a><a id="Anatomy/body-parts-1"></a><a class="docs-heading-anchor-permalink" href="#Anatomy/body-parts" title="Permalink"></a></h2><p>The anatomy scanned in a specific collection and/or modality are listed by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-HNSCC&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">0×0 DataFrame</span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">38×1 DataFrame
  Row │ BodyPartExamined
-     │ String15
+     │<span class="sgr90"> String31
 ─────┼──────────────────
-   1 │ CHEST
-   2 │ BREAST
-   3 │ PROSTATE
-   4 │ COLON
-   5 │ PHANTOM
-   6 │ KIDNEY
-   7 │ Kidney
-   8 │ OVARY
+   1 │ ABDOMEN
+   2 │ ABDOMENPELVIS
+   3 │ ADRENAL
+   4 │ BLADDER
+   5 │ BREAST
+   6 │ CHEST
+   7 │ CHEST (THORAX)
+   8 │ CHESTABDOMEN
   ⋮  │        ⋮
-  52 │ THORAX
-  53 │ WHOLEBODY
-  54 │ CHESTABDOMEN
-  55 │ Thorax
-  56 │ THORAXABD
-  57 │ CHEST PE
-  58 │ CHEST_ABDOMEN
-         43 rows omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-SAR&quot;, modality = &quot;MR&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">2×1 DataFrame
+  32 │ SPINE
+  33 │ STOMACH
+  34 │ THORAX
+  35 │ THYROID
+  36 │ UTERUS
+  37 │ WHOLEBODY
+  38 │ WO INTER
+</span><span class="sgr36">         23 rows omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-SAR&quot;, modality = &quot;MR&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">2×1 DataFrame
  Row │ BodyPartExamined
-     │ String15
+     │<span class="sgr90"> String15
 ─────┼──────────────────
-   1 │ Pelvis
-   2 │ EXTREMITY</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-SAR&quot;, modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">4×1 DataFrame
+   1 │ EXTREMITY
+   2 │ PELVIS</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_bodyparts(collection = &quot;CPTAC-SAR&quot;, modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">4×1 DataFrame
  Row │ BodyPartExamined
-     │ String15
+     │<span class="sgr90"> String15
 ─────┼──────────────────
    1 │ ABDOMEN
    2 │ CHEST
-   3 │ WHOLEBODY
-   4 │ EXTREMITY</code></pre><h2 id="Manufacturers"><a class="docs-heading-anchor" href="#Manufacturers">Manufacturers</a><a id="Manufacturers-1"></a><a class="docs-heading-anchor-permalink" href="#Manufacturers" title="Permalink"></a></h2><p>A list of scanner manufacturers for a specific collection/modality/anatomy is obtained by</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_manufacturers(collection = &quot;TCGA-KICH&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">3×1 DataFrame
+   3 │ EXTREMITY
+   4 │ WHOLEBODY</span></span></code></pre><h2 id="Manufacturers"><a class="docs-heading-anchor" href="#Manufacturers">Manufacturers</a><a id="Manufacturers-1"></a><a class="docs-heading-anchor-permalink" href="#Manufacturers" title="Permalink"></a></h2><p>A list of scanner manufacturers for a specific collection/modality/anatomy is obtained by</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_manufacturers(collection = &quot;TCGA-KICH&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">3×1 DataFrame
  Row │ Manufacturer
-     │ String31
+     │<span class="sgr90"> String31
 ─────┼────────────────────
    1 │ GE MEDICAL SYSTEMS
    2 │ SIEMENS
-   3 │ TOSHIBA</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_manufacturers(modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">21×1 DataFrame
- Row │ Manufacturer
-     │ String
-─────┼───────────────────────────────────
-   1 │ GE MEDICAL SYSTEMS
-   2 │ SIEMENS
-   3 │ TOSHIBA
-   4 │ Philips
-   5 │ Vital Images, Inc
-   6 │ Philips Medical Systems
-   7 │ Siemens
-   8 │ PNMS
-  ⋮  │                 ⋮
-  15 │ Vital Images, Inc.
-  16 │ MIM Software Inc.
-  17 │ Varian Imaging Laboratories, Swi…
-  18 │ ADAC
-  19 │ Varian Medical Systems
-  20 │ Hitachi Medical Corporation
-  21 │ Varian Medical Systems \\/ MIM S…
-                           6 rows omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_manufacturers(bodypart = &quot;BREAST&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">10×1 DataFrame
- Row │ Manufacturer
-     │ String31
-─────┼─────────────────────────────
-   1 │ Philips Medical Systems
-   2 │ GE MEDICAL SYSTEMS
-   3 │ LORAD
-   4 │ Lorad, A Hologic Company
-   5 │ Confirma Inc.
-   6 │ SIEMENS
-   7 │ Siemens
-   8 │ GE MEDICAL SYSTEMS, NUCLEAR
-   9 │ VICTRE
-  10 │ HOLOGIC, Inc.</code></pre><p>The same manufacturer can have different names, e.g. <code>Philips</code>/<code>Philips Medical Systems</code> and <code>SIEMENS</code>/<code>Siemens</code>.</p><h2 id="Patients"><a class="docs-heading-anchor" href="#Patients">Patients</a><a id="Patients-1"></a><a class="docs-heading-anchor-permalink" href="#Patients" title="Permalink"></a></h2><p>The patients in a given collection are listed by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_patients(collection = &quot;TCGA-SARC&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">5×4 DataFrame
- Row │ PatientID     PatientName   PatientSex  Collection
-     │ String15      String15      String1     String15
-─────┼────────────────────────────────────────────────────
-   1 │ TCGA-QQ-A5V2  TCGA-QQ-A5V2  M           TCGA-SARC
-   2 │ TCGA-QQ-A5VC  TCGA-QQ-A5VC  F           TCGA-SARC
-   3 │ TCGA-QQ-A8VF  TCGA-QQ-A8VF  M           TCGA-SARC
-   4 │ TCGA-QQ-A8VH  TCGA-QQ-A8VH  F           TCGA-SARC
-   5 │ TCGA-QQ-A8VG  TCGA-QQ-A8VG  M           TCGA-SARC</code></pre><h3 id="Patients-for-specific-modality"><a class="docs-heading-anchor" href="#Patients-for-specific-modality">Patients for specific modality</a><a id="Patients-for-specific-modality-1"></a><a class="docs-heading-anchor-permalink" href="#Patients-for-specific-modality" title="Permalink"></a></h3><p>To get a patients for which a specific modality was used, a slightly different function is used:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_patients_by_modality(collection = &quot;TCGA-SARC&quot;, modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">4×3 DataFrame
- Row │ PatientID     Collection  Modality
-     │ String15      String15    String3
-─────┼────────────────────────────────────
-   1 │ TCGA-QQ-A5V2  TCGA-SARC   CT
-   2 │ TCGA-QQ-A5VC  TCGA-SARC   CT
-   3 │ TCGA-QQ-A8VF  TCGA-SARC   CT
-   4 │ TCGA-QQ-A8VG  TCGA-SARC   CT</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_patients_by_modality(collection = &quot;TCGA-SARC&quot;, modality = &quot;MR&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">2×3 DataFrame
- Row │ PatientID     Collection  Modality
-     │ String15      String15    String3
-─────┼────────────────────────────────────
-   1 │ TCGA-QQ-A8VF  TCGA-SARC   MR
-   2 │ TCGA-QQ-A8VH  TCGA-SARC   MR</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Although the functionality of <code>tcia_patients_by_modality()</code> could be combined into the <code>tcia_patients()</code> function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.</p></div></div><h3 id="Patients-added-after-specific-date"><a class="docs-heading-anchor" href="#Patients-added-after-specific-date">Patients added after specific date</a><a id="Patients-added-after-specific-date-1"></a><a class="docs-heading-anchor-permalink" href="#Patients-added-after-specific-date" title="Permalink"></a></h3><p>In large collections, it can be useful to query patients that were added after a date specified as YYYY-MM-DD. This is accomplished by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_newpatients(collection = &quot;TCGA-GBM&quot;, date = &quot;2015-01-01&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×2 DataFrame</code></pre><h2 id="Patient-studies"><a class="docs-heading-anchor" href="#Patient-studies">Patient studies</a><a id="Patient-studies-1"></a><a class="docs-heading-anchor-permalink" href="#Patient-studies" title="Permalink"></a></h2><p>A list of visits/studies for a given collection/patient is obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_studies(collection = &quot;TCGA-THCA&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">7×9 DataFrame
- Row │ Collection  PatientID     PatientName   PatientSex  StudyInstanceUID    ⋯
-     │ String15    String15      String15      String1     String              ⋯
+   3 │ TOSHIBA</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_manufacturers(modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">┌ Warning: thread = 1 warning: parsed expected 1 columns, but didn&#39;t reach end of line around data row: 5. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 6. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 7. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 8. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 9. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 10. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 13. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 14. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 15. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 16. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 17. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 18. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 19. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 20. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 21. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 22. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 23. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 24. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 25. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 26. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 27. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 28. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 30. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 1. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 2. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 3. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 4. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 6. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 7. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 8. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 9. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 10. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 13. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 14. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 15. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 16. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 17. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 18. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 19. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 20. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 21. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 22. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 23. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 24. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 25. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 26. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 27. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 28. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 30. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 31. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 31. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+<span class="sgr1">33×2 DataFrame
+ Row │ Manufacturer                       Column2
+     │<span class="sgr90"> String                             String15
+─────┼─────────────────────────────────────────────────
+   1 │ ADAC                               missing
+   2 │ Barco                              missing
+   3 │ Bayer HealthCare LLC               missing
+   4 │ Canon Medical Systems              missing
+   5 │ CMS                                 Inc.
+   6 │ CPS                                missing
+   7 │ ELEKTA / MIM Software              missing
+   8 │ GE MEDICAL SYSTEMS                 missing
+  ⋮  │                 ⋮                       ⋮
+  27 │ TOSHIBA                            missing
+  28 │ Unknown manufacturer               missing
+  29 │ Varian Imaging Laboratories         Switzerland
+  30 │ Varian Medical Systems             missing
+  31 │ Varian Medical Systems / MIM Sof…  missing
+  32 │ Vital Images                        Inc
+  33 │ Vital Images                        Inc.
+</span><span class="sgr36">                                        18 rows omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_manufacturers(bodypart = &quot;BREAST&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">┌ Warning: thread = 1 warning: parsed expected 1 columns, but didn&#39;t reach end of line around data row: 6. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 8. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 10. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 11. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 12. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 13. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 14. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 15. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 1 / 2 columns around data row: 16. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+<span class="sgr1">17×2 DataFrame
+ Row │ Manufacturer             Column2
+     │<span class="sgr90"> String31                 String31
+─────┼─────────────────────────────────────────────
+   1 │ 0000000                  missing
+   2 │ Canon Medical Systems    missing
+   3 │ Confirma Inc.            missing
+   4 │ GE HEALTHCARE            missing
+   5 │ GE MEDICAL SYSTEMS       missing
+   6 │ GE MEDICAL SYSTEMS        NUCLEAR
+   7 │ HOLOGIC                   Inc.
+   8 │ LORAD                    missing
+   9 │ Lorad                     A Hologic Company
+  10 │ LUMISYS                  missing
+  11 │ Merge Healthcare         missing
+  12 │ Philips Healthcare       missing
+  13 │ Philips Medical Systems  missing
+  14 │ QIICR                    missing
+  15 │ SIEMENS                  missing
+  16 │ Siemens                  missing
+  17 │ VICTRE                   missing</span></span></code></pre><p>The same manufacturer can have different names, e.g. <code>Philips</code>/<code>Philips Medical Systems</code> and <code>SIEMENS</code>/<code>Siemens</code>.</p><h2 id="Patients"><a class="docs-heading-anchor" href="#Patients">Patients</a><a id="Patients-1"></a><a class="docs-heading-anchor-permalink" href="#Patients" title="Permalink"></a></h2><p>The patients in a given collection are listed by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_patients(collection = &quot;TCGA-SARC&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">5×9 DataFrame
+ Row │ PatientId     PatientName   PatientBirthDate  PatientSex  EthnicGroup   ⋯
+     │<span class="sgr90"> String15      String15      Missing           String1     Missing       ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ TCGA-THCA   TCGA-DE-A4MD  TCGA-DE-A4MD  M           1.3.6.1.4.1.14519.5 ⋯
-   2 │ TCGA-THCA   TCGA-DE-A4MA  TCGA-DE-A4MA  F           1.3.6.1.4.1.14519.5
-   3 │ TCGA-THCA   TCGA-DE-A4MA  TCGA-DE-A4MA  F           1.3.6.1.4.1.14519.5
-   4 │ TCGA-THCA   TCGA-DE-A4MC  TCGA-DE-A4MC  F           1.3.6.1.4.1.14519.5
-   5 │ TCGA-THCA   TCGA-DE-A4MB  TCGA-DE-A4MB  F           1.3.6.1.4.1.14519.5 ⋯
-   6 │ TCGA-THCA   TCGA-E3-A3DZ  TCGA-E3-A3DZ  F           1.3.6.1.4.1.14519.5
-   7 │ TCGA-THCA   TCGA-E3-A3E5  TCGA-E3-A3E5  M           1.3.6.1.4.1.14519.5
-                                                               5 columns omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_studies(patient = &quot;TCGA-QQ-A8VF&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×9 DataFrame</code></pre><p>If the unique identifier (UID) for a study is known (a.k.a. StudyInstanceUID), then that can also be used</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_studies(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×9 DataFrame</code></pre><h3 id="Patient-studies-added-after-specific-data"><a class="docs-heading-anchor" href="#Patient-studies-added-after-specific-data">Patient studies added after specific data</a><a id="Patient-studies-added-after-specific-data-1"></a><a class="docs-heading-anchor-permalink" href="#Patient-studies-added-after-specific-data" title="Permalink"></a></h3><p>A list of visits/studies that were added after some date, formatted by YYYY-MM-DD, can be obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_newstudies(collection=&quot;TCGA-GBM&quot;, date=&quot;2015-01-01&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×3 DataFrame</code></pre><h2 id="Imaging-series"><a class="docs-heading-anchor" href="#Imaging-series">Imaging series</a><a id="Imaging-series-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series" title="Permalink"></a></h2><p>Each patient study consists of one or more imaging series which can be obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(collection = &quot;TCGA-THCA&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">28×16 DataFrame
- Row │ PatientID     StudyInstanceUID                   SeriesInstanceUID      ⋯
-     │ String15      String                             String                 ⋯
+   1 │ TCGA-QQ-A5V2  TCGA-QQ-A5V2           missing  M               missing   ⋯
+   2 │ TCGA-QQ-A5VC  TCGA-QQ-A5VC           missing  F               missing
+   3 │ TCGA-QQ-A8VF  TCGA-QQ-A8VF           missing  M               missing
+   4 │ TCGA-QQ-A8VH  TCGA-QQ-A8VH           missing  F               missing
+   5 │ TCGA-QQ-A8VG  TCGA-QQ-A8VG           missing  M               missing   ⋯
+</span><span class="sgr36">                                                               4 columns omitted</span></span></code></pre><h3 id="Patients-for-specific-modality"><a class="docs-heading-anchor" href="#Patients-for-specific-modality">Patients for specific modality</a><a id="Patients-for-specific-modality-1"></a><a class="docs-heading-anchor-permalink" href="#Patients-for-specific-modality" title="Permalink"></a></h3><p>To get a patients for which a specific modality was used, a slightly different function is used:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_patients_by_modality(collection = &quot;TCGA-SARC&quot;, modality = &quot;CT&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">4×1 DataFrame
+ Row │ PatientId
+     │<span class="sgr90"> String15
+─────┼──────────────
+   1 │ TCGA-QQ-A5V2
+   2 │ TCGA-QQ-A5VC
+   3 │ TCGA-QQ-A8VF
+   4 │ TCGA-QQ-A8VG</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_patients_by_modality(collection = &quot;TCGA-SARC&quot;, modality = &quot;MR&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">2×1 DataFrame
+ Row │ PatientId
+     │<span class="sgr90"> String15
+─────┼──────────────
+   1 │ TCGA-QQ-A8VF
+   2 │ TCGA-QQ-A8VH</span></span></code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>Although the functionality of <code>tcia_patients_by_modality()</code> could be combined into the <code>tcia_patients()</code> function, they use a different query endpoint so the two functions were given different names to keep that difference explicit.</p></div></div><h3 id="Patients-added-after-specific-date"><a class="docs-heading-anchor" href="#Patients-added-after-specific-date">Patients added after specific date</a><a id="Patients-added-after-specific-date-1"></a><a class="docs-heading-anchor-permalink" href="#Patients-added-after-specific-date" title="Permalink"></a></h3><p>In large collections, it can be useful to query patients that were added after a date specified as YYYY/MM/DD. This is accomplished by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_newpatients(collection = &quot;TCGA-GBM&quot;, date = &quot;2015/01/01&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">0×0 DataFrame</span></code></pre><h2 id="Patient-studies"><a class="docs-heading-anchor" href="#Patient-studies">Patient studies</a><a id="Patient-studies-1"></a><a class="docs-heading-anchor-permalink" href="#Patient-studies" title="Permalink"></a></h2><p>A list of visits/studies for a given collection/patient is obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_studies(collection = &quot;TCGA-THCA&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">┌ Warning: thread = 1 warning: parsed expected 15 columns, but didn&#39;t reach end of line around data row: 7. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: parsed expected 15 columns, but didn&#39;t reach end of line around data row: 7. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: parsed expected 15 columns, but didn&#39;t reach end of line around data row: 7. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+<span class="sgr1">7×16 DataFrame
+ Row │ StudyInstanceUID                   StudyDate              StudyDescript ⋯
+     │<span class="sgr90"> String                             String31               String        ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ TCGA-DE-A4MD  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2. ⋯
-   2 │ TCGA-DE-A4MD  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-   3 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-   4 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-   5 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2. ⋯
-   6 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-   7 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-   8 │ TCGA-DE-A4MA  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-  ⋮  │      ⋮                        ⋮                                  ⋮      ⋱
-  22 │ TCGA-DE-A4MC  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2. ⋯
-  23 │ TCGA-DE-A4MC  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-  24 │ TCGA-DE-A4MB  1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.
-  25 │ TCGA-E3-A3DZ  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.
-  26 │ TCGA-E3-A3DZ  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2. ⋯
-  27 │ TCGA-E3-A3E5  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.
-  28 │ TCGA-E3-A3E5  1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.
-                                                  14 columns and 13 rows omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">15×16 DataFrame
- Row │ PatientID     StudyInstanceUID                   SeriesInstanceUID      ⋯
-     │ String15      String                             String                 ⋯
+   1 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  2004-09-26 00:00:00.0  Outside Read  ⋯
+   2 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  2004-05-27 00:00:00.0  Outside Read
+   3 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  2004-06-13 00:00:00.0  PET/CT Tumor
+   4 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  2004-07-21 00:00:00.0  CT NECK SOFT
+   5 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  2004-07-05 00:00:00.0  Outside Read  ⋯
+   6 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1996-04-14 00:00:00.0  CT NECK W/ CO
+   7 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1996-03-09 00:00:00.0  CT NECK W/ CO
+</span><span class="sgr36">                                                              14 columns omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_studies(patient = &quot;TCGA-QQ-A8VF&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">2×15 DataFrame
+ Row │ StudyInstanceUID                   StudyDate              StudyDescript ⋯
+     │<span class="sgr90"> String                             String31               String31      ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
-   2 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   3 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   4 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   5 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
-   6 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   7 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   8 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   9 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
-  10 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-  11 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-  12 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-  13 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
-  14 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-  15 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-                                                              14 columns omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">6×16 DataFrame
- Row │ PatientID     StudyInstanceUID                   SeriesInstanceUID      ⋯
-     │ String15      String                             String                 ⋯
+   1 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1997-11-26 00:00:00.0  MRI LOWER EXT ⋯
+   2 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1997-11-29 00:00:00.0  CT CHEST W/ C
+</span><span class="sgr36">                                                              13 columns omitted</span></span></code></pre><p>If the unique identifier (UID) for a study is known (a.k.a. StudyInstanceUID), then that can also be used</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_studies(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">1×15 DataFrame
+ Row │ StudyInstanceUID                   StudyDate              StudyDescript ⋯
+     │<span class="sgr90"> String                             String31               String31      ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
-   2 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   3 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   4 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-   5 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2. ⋯
-   6 │ TCGA-QQ-A8VF  1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.
-                                                              14 columns omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(modality = &quot;CT&quot;, manufacturer = &quot;TOSHIBA&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">1551×16 DataFrame
-  Row │ PatientID       StudyInstanceUID                   SeriesInstanceUID   ⋯
-      │ String31        String                             String              ⋯
+   1 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1997-11-29 00:00:00.0  CT CHEST W/ C ⋯
+</span><span class="sgr36">                                                              13 columns omitted</span></span></code></pre><h3 id="Patient-studies-added-after-specific-data"><a class="docs-heading-anchor" href="#Patient-studies-added-after-specific-data">Patient studies added after specific data</a><a id="Patient-studies-added-after-specific-data-1"></a><a class="docs-heading-anchor-permalink" href="#Patient-studies-added-after-specific-data" title="Permalink"></a></h3><p>A list of visits/studies that were added after some date, formatted by YYYY-MM-DD, can be obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_newstudies(collection=&quot;TCGA-GBM&quot;, date=&quot;2015-01-01&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">0×0 DataFrame</span></code></pre><h2 id="Imaging-series"><a class="docs-heading-anchor" href="#Imaging-series">Imaging series</a><a id="Imaging-series-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series" title="Permalink"></a></h2><p>Each patient study consists of one or more imaging series which can be obtained by:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(collection = &quot;TCGA-THCA&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">28×20 DataFrame
+ Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
+     │<span class="sgr90"> String                             String                             S ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C ⋯
+   2 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
+   3 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
+   4 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
+   5 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C ⋯
+   6 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
+   7 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
+   8 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  C
+  ⋮  │                 ⋮                                  ⋮                    ⋱
+  22 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P ⋯
+  23 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P
+  24 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P
+  25 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P
+  26 │ 1.3.6.1.4.1.14519.5.2.1.8421.401…  1.3.6.1.4.1.14519.5.2.1.8421.401…  P ⋯
+  27 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.1.3023.401…  C
+  28 │ 1.3.6.1.4.1.14519.5.2.1.3023.401…  1.3.6.1.4.1.14519.5.2.1.3023.401…  C
+</span><span class="sgr36">                                                  18 columns and 13 rows omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">15×20 DataFrame
+ Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
+     │<span class="sgr90"> String                             String                             S ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M ⋯
+   2 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
+   3 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
+   4 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
+   5 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M ⋯
+   6 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
+   7 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
+   8 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M
+   9 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  M ⋯
+  10 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+  11 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+  12 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+  13 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C ⋯
+  14 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+  15 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+</span><span class="sgr36">                                                              18 columns omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(study = &quot;1.3.6.1.4.1.14519.5.2.1.3023.4024.298690116465423805879206377806&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">6×20 DataFrame
+ Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
+     │<span class="sgr90"> String                             String                             S ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C ⋯
+   2 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+   3 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+   4 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+   5 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C ⋯
+   6 │ 1.3.6.1.4.1.14519.5.2.1.3023.402…  1.3.6.1.4.1.14519.5.2.1.3023.402…  C
+</span><span class="sgr36">                                                              18 columns omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(modality = &quot;CT&quot;, manufacturer = &quot;TOSHIBA&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">┌ Warning: thread = 1 warning: parsed expected 20 columns, but didn&#39;t reach end of line around data row: 238. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: parsed expected 20 columns, but didn&#39;t reach end of line around data row: 238. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 240. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 241. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 242. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 243. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 244. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 245. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 246. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 247. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 248. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 249. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 250. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 251. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 252. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 253. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 254. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 255. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 256. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 257. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 258. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 259. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 260. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 261. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 262. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 263. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 264. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 265. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 266. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 267. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 268. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 269. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 270. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 271. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 272. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 273. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 274. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 275. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 276. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 277. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 278. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 279. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 280. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 281. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 282. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 283. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 284. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 285. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 286. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 287. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 288. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 289. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 290. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 291. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 292. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 293. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 294. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 295. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 296. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 297. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 298. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 299. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 300. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 301. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 302. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 303. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 304. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 305. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 306. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 307. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 308. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 309. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 310. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 311. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 312. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 313. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 314. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 315. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 316. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 317. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 318. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 319. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 320. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 321. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 322. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 323. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 324. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 325. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 326. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 327. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 328. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 329. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 330. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 331. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 332. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 333. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 334. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 335. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 336. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 337. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 338. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 339. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1 warning: only found 20 / 26 columns around data row: 340. Filling remaining columns with `missing`
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:586
+┌ Warning: thread = 1: too many warnings, silencing any further warnings
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:591
+┌ Warning: thread = 1 warning: parsed expected 26 columns, but didn&#39;t reach end of line around data row: 403. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: parsed expected 26 columns, but didn&#39;t reach end of line around data row: 403. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+┌ Warning: thread = 1 warning: parsed expected 26 columns, but didn&#39;t reach end of line around data row: 403. Parsing extra columns and widening final columnset
+└ @ CSV ~/.julia/packages/CSV/aoJqo/src/file.jl:587
+<span class="sgr1">2068×27 DataFrame
+  Row │ SeriesInstanceUID                  StudyInstanceUID                    ⋯
+      │<span class="sgr90"> String                             String                              ⋯
 ──────┼─────────────────────────────────────────────────────────────────────────
-    1 │ LIDC-IDRI-0104  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5 ⋯
-    2 │ LIDC-IDRI-0151  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5
-    3 │ LIDC-IDRI-0156  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5
-    4 │ LIDC-IDRI-0310  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5
-    5 │ LIDC-IDRI-0315  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5 ⋯
-    6 │ LIDC-IDRI-0334  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5
-    7 │ LIDC-IDRI-0346  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5
-    8 │ LIDC-IDRI-0354  1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5
-  ⋮   │       ⋮                         ⋮                                  ⋮   ⋱
- 1545 │ AP-DRVN         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5 ⋯
- 1546 │ AP-6H6G         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5
- 1547 │ AP-97PG         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5
- 1548 │ AP-95DK         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5
- 1549 │ AP-95DK         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5 ⋯
- 1550 │ AP-95DK         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5
- 1551 │ AP-DRVN         1.3.6.1.4.1.14519.5.2.1.5438.560…  1.3.6.1.4.1.14519.5
-                                                14 columns and 1536 rows omitted</code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(bodypart = &quot;EXTREMITY&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">625×16 DataFrame
- Row │ PatientID       StudyInstanceUID                   SeriesInstanceUID    ⋯
-     │ String15        String                             String               ⋯
+    1 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…   ⋯
+    2 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
+    3 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
+    4 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
+    5 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…   ⋯
+    6 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
+    7 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
+    8 │ 1.3.6.1.4.1.14519.5.2.1.6279.600…  1.3.6.1.4.1.14519.5.2.1.6279.600…
+  ⋮   │                 ⋮                                  ⋮                   ⋱
+ 2062 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…   ⋯
+ 2063 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…
+ 2064 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…
+ 2065 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…
+ 2066 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…   ⋯
+ 2067 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…
+ 2068 │ 1.3.6.1.4.1.14519.5.2.1.1600.120…  1.3.6.1.4.1.14519.5.2.1.1600.120…
+</span><span class="sgr36">                                                25 columns and 2053 rows omitted</span></span></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series(bodypart = &quot;EXTREMITY&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">924×20 DataFrame
+ Row │ SeriesInstanceUID                  StudyInstanceUID                   M ⋯
+     │<span class="sgr90"> String                             String                             S ⋯
 ─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ STS_001         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5. ⋯
-   2 │ STS_010         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.
-   3 │ STS_001         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.
-   4 │ STS_001         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.
-   5 │ STS_010         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5. ⋯
-   6 │ STS_010         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.
-   7 │ STS_001         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.
-   8 │ STS_001         1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.
-  ⋮  │       ⋮                         ⋮                                  ⋮    ⋱
- 619 │ C3L-02846       1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5. ⋯
- 620 │ C3L-02846       1.3.6.1.4.1.14519.5.2.1.6450.262…  1.3.6.1.4.1.14519.5.
- 621 │ C3N-00875       1.3.6.1.4.1.14519.5.2.1.3320.327…  1.3.6.1.4.1.14519.5.
- 622 │ Pseudo-PHI-009  1.3.6.1.4.1.14519.5.2.1.8700.966…  1.3.6.1.4.1.14519.5.
- 623 │ Pseudo-PHI-018  1.3.6.1.4.1.14519.5.2.1.8700.966…  1.3.6.1.4.1.14519.5. ⋯
- 624 │ 8834647487      2.25.274670750841988288332269850…  2.25.227201128343065
- 625 │ 6614238035      2.25.141609806662491954314930913…  2.25.316416899981897
-                                                 14 columns and 610 rows omitted</code></pre><p>This query&#39;s importance is hinted by the smorgasbord of parameters it accepts.  That&#39;s because this query returns the <code>SeriesInstanceUID</code> which is needed to download images. Although the above examples only show <code>PatientID</code>, the query actually returns more information which is not shown because of limited screen space.  The complete list of columns are:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; series_dataframe = tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;);</code><code class="nohighlight hljs ansi" style="display:block;"></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; names(series_dataframe)</code><code class="nohighlight hljs ansi" style="display:block;">16-element Vector{String}:
- &quot;PatientID&quot;
- &quot;StudyInstanceUID&quot;
+   1 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  C ⋯
+   2 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
+   3 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
+   4 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
+   5 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R ⋯
+   6 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
+   7 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
+   8 │ 1.3.6.1.4.1.14519.5.2.1.5168.190…  1.3.6.1.4.1.14519.5.2.1.5168.190…  R
+  ⋮  │                 ⋮                                  ⋮                    ⋱
+ 918 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M ⋯
+ 919 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M
+ 920 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M
+ 921 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M
+ 922 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M ⋯
+ 923 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M
+ 924 │ 1.3.6.1.4.1.14519.5.2.1.1620.122…  1.3.6.1.4.1.14519.5.2.1.1620.122…  M
+</span><span class="sgr36">                                                 18 columns and 909 rows omitted</span></span></code></pre><p>This query&#39;s importance is hinted by the smorgasbord of parameters it accepts.  That&#39;s because this query returns the <code>SeriesInstanceUID</code> which is needed to download images. Although the above examples only show <code>PatientID</code>, the query actually returns more information which is not shown because of limited screen space.  The complete list of columns are:</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; series_dataframe = tcia_series(patient = &quot;TCGA-QQ-A8VF&quot;);</code><code class="nohighlight hljs ansi" style="display:block;"></code><br/><code class="language-julia-repl hljs" style="display:block;">julia&gt; names(series_dataframe)</code><code class="nohighlight hljs ansi" style="display:block;">20-element Vector{String}:
  &quot;SeriesInstanceUID&quot;
+ &quot;StudyInstanceUID&quot;
  &quot;Modality&quot;
  &quot;ProtocolName&quot;
  &quot;SeriesDate&quot;
@@ -232,12 +591,17 @@
  &quot;SeriesNumber&quot;
  &quot;AnnotationsFlag&quot;
  &quot;Collection&quot;
+ &quot;PatientID&quot;
  &quot;Manufacturer&quot;
  &quot;ManufacturerModelName&quot;
  &quot;SoftwareVersions&quot;
- &quot;Visibility&quot;
- &quot;ImageCount&quot;</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The entire table could have been printed by:</p><pre><code class="language-julia hljs">show(series_dataframe, allrows = true, allcols = true)</code></pre></div></div><div class="admonition is-warning"><header class="admonition-header">Warning</header><div class="admonition-body"><p>Passing <code>format = &quot;json&quot;</code> will result in one fewer column. This is because the <code>AnnotationsFlag</code> field is returned for CSV output but not for JSON. </p></div></div><h3 id="Imaging-series-size"><a class="docs-heading-anchor" href="#Imaging-series-size">Imaging series size</a><a id="Imaging-series-size-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series-size" title="Permalink"></a></h3><p>The size (in bytes) and number of images for a given imaging series is given by</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series_size(series = &quot;1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">1×2 DataFrame
+ &quot;ImageCount&quot;
+ &quot;TimeStamp&quot;
+ &quot;LicenseName&quot;
+ &quot;LicenseURI&quot;
+ &quot;CollectionURI&quot;
+ &quot;FileSize&quot;</code></pre><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>The entire table could have been printed by:</p><pre><code class="language-julia hljs">show(series_dataframe, allrows = true, allcols = true)</code></pre></div></div><div class="admonition is-warning"><header class="admonition-header">Warning</header><div class="admonition-body"><p>Passing <code>format = &quot;json&quot;</code> will result in one fewer column. This is because the <code>AnnotationsFlag</code> field is returned for CSV output but not for JSON. </p></div></div><h3 id="Imaging-series-size"><a class="docs-heading-anchor" href="#Imaging-series-size">Imaging series size</a><a id="Imaging-series-size-1"></a><a class="docs-heading-anchor-permalink" href="#Imaging-series-size" title="Permalink"></a></h3><p>The size (in bytes) and number of images for a given imaging series is given by</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_series_size(series = &quot;1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">1×2 DataFrame
  Row │ TotalSizeInBytes  ObjectCount
-     │ Missing           Int64
+     │<span class="sgr90"> Int64             Int64
 ─────┼───────────────────────────────
-   1 │          missing            0</code></pre><div class="admonition is-warning"><header class="admonition-header">Warning</header><div class="admonition-body"><p>It is recommended that <code>tcia_series_size()</code> should <strong>not</strong> be used with <code>format = json</code>. This is because the json version interprets the <code>TotalSizeInBytes</code> as string/text rather than a number.</p></div></div><h2 id="Service-Object-Pairs-(SOP)"><a class="docs-heading-anchor" href="#Service-Object-Pairs-(SOP)">Service-Object Pairs (SOP)</a><a id="Service-Object-Pairs-(SOP)-1"></a><a class="docs-heading-anchor-permalink" href="#Service-Object-Pairs-(SOP)" title="Permalink"></a></h2><p>Each imaging series consists of one or more images, each of which have a service-object-pair unique identifier (SOPInstanceUID). These can be listed by</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_sop(series = &quot;1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948&quot;)</code><code class="nohighlight hljs ansi" style="display:block;">0×1 DataFrame</code></pre><p>These identifiers are useful for accessing a specific image without having to download the entire imaging series.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../formats/">« Formats</a><a class="docs-footer-nextpage" href="../downloading/">Data Download »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.14 on <span class="colophon-date" title="Friday 4 March 2022 06:07">Friday 4 March 2022</span>. Using Julia version 1.7.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+   1 │   24012211806228          124</span></span></code></pre><div class="admonition is-warning"><header class="admonition-header">Warning</header><div class="admonition-body"><p>It is recommended that <code>tcia_series_size()</code> should <strong>not</strong> be used with <code>format = json</code>. This is because the json version interprets the <code>TotalSizeInBytes</code> as string/text rather than a number.</p></div></div><h2 id="Service-Object-Pairs-(SOP)"><a class="docs-heading-anchor" href="#Service-Object-Pairs-(SOP)">Service-Object Pairs (SOP)</a><a id="Service-Object-Pairs-(SOP)-1"></a><a class="docs-heading-anchor-permalink" href="#Service-Object-Pairs-(SOP)" title="Permalink"></a></h2><p>Each imaging series consists of one or more images, each of which have a service-object-pair unique identifier (SOPInstanceUID). These can be listed by</p><pre><code class="language-julia-repl hljs" style="display:block;">julia&gt; tcia_sop(series = &quot;1.3.6.1.4.1.14519.5.2.1.4591.4001.241972527061347495484079664948&quot;)</code><code class="nohighlight hljs ansi" style="display:block;"><span class="sgr1">0×0 DataFrame</span></code></pre><p>These identifiers are useful for accessing a specific image without having to download the entire imaging series.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../formats/">« Formats</a><a class="docs-footer-nextpage" href="../downloading/">Data Download »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Wednesday 10 January 2024 07:26">Wednesday 10 January 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
