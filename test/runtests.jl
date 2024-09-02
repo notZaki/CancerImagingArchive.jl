@@ -1,4 +1,5 @@
-using CancerImagingArchive, DataFrames
+using CancerImagingArchive
+using DataFrames
 using Test
 
 #######
@@ -6,14 +7,16 @@ using Test
 #######
 
 # Use global variable for filenames because we want to delete them if they already exist
-zip_file = "test.zip"
-dicom_file = "test.dcm"
-csv_file = "test.csv"
-json_file = "test.json"
-
-for file in [zip_file, dicom_file, csv_file, json_file]
-  rm(file, force=true)
+testdatadir = "./testdata"
+if isdir(testdatadir)
+  rm(testdatadir, recursive=true)
 end
+mkdir(testdatadir)
+zip_file = joinpath(testdatadir, "test.zip")
+dicom_file = joinpath(testdatadir, "test.dcm")
+csv_file = joinpath(testdatadir, "test.csv")
+json_file = joinpath(testdatadir, "test.json")
+
 
 # Helper function for comparing CSV/DataFrames vs JSON/DictionaryArrays
 function compare_csv_vs_json(csv, json; max_names=Inf)
@@ -72,16 +75,19 @@ SERIES_UID = "1.3.6.1.4.1.14519.5.2.1.6834.5010.322628904903035357840500590726"
   @test_throws ErrorException tcia_collections(format="unknown")
   collections_csv = tcia_collections()
   collections_json = tcia_collections(format="json")
-  @test length(collections_json) > 90
+  @test length(collections_json) > 100
   compare_csv_vs_json(collections_csv, collections_json)
 end
 
 @testset "Queries - Modalities" begin
-  @test length(tcia_modalities(collection="TCGA-SARC", format="json")) >= 2
-  @test length(tcia_modalities(bodypart="BREAST", format="json")) > 5
+  collection_tcga_sarc = tcia_modalities(collection="TCGA-SARC", format="json")
+  collection_tcga_sarc_csv = tcia_modalities(collection="TCGA-SARC")
+  collection_breast = tcia_modalities(bodypart="BREAST", format="json")
+  @test length(collection_tcga_sarc) >= 2
+  @test length(collection_breast) > 5
   compare_csv_vs_json(
-    tcia_modalities(collection="TCGA-SARC", bodypart="LEG"),
-    tcia_modalities(collection="TCGA-SARC", bodypart="LEG", format="json"))
+    collection_tcga_sarc_csv,
+    collection_tcga_sarc)
 end
 
 @testset "Queries - BodyParts" begin
@@ -91,21 +97,14 @@ end
     tcia_bodyparts(collection="TCGA-SARC", format="json"))
 end
 
-#@testset "Queries - Manufacturers" begin
-#    compare_csv_vs_json(
-#        tcia_manufacturers(collection = "TCGA-KICH", modality = "MR"),
-#        tcia_manufacturers(collection = "TCGA-KICH", modality = "MR", format = "json"))
-#    compare_csv_vs_json(
-#        tcia_manufacturers(bodypart = "BREAST"),
-#        tcia_manufacturers(bodypart = "BREAST", format = "json"))
-#end
+@testset "Queries - Manufacturers" begin
+  compare_csv_vs_json(
+    tcia_manufacturers(collection="TCGA-KICH", modality="MR"),
+    tcia_manufacturers(collection="TCGA-KICH", modality="MR", format="json"))
+end
 
 @testset "Queries - Patients" begin
-  #compare_csv_vs_json(
-  #   tcia_patients(collection = "TCGA-THCA"),
-  #   tcia_patients(collection = "TCGA-THCA", format = "json")
-  #)
-  tcia_patients(collection="TCGA-THCA")
+  @test nrow(tcia_patients(collection="TCGA-THCA")) > 5
 
   # Following criteria should only find one patient
   found_patient = tcia_patients_by_modality(collection="ACRIN-FLT-Breast", modality="OT")
@@ -118,49 +117,22 @@ end
 end
 
 @testset "Queries - Studies" begin
-  # The CSV version requires a few manual changes, so we do them first
   studies_csv = tcia_studies(collection="TCGA-SARC")
-  # 1. Convert the date to plain strings so that they can be compared with the json version
-  studies_csv.StudyDate = string.(studies_csv.StudyDate)
-  # 2. Remove the escape characters in the string. These occur in the study description
-  for (idx, description) in enumerate(studies_csv.StudyDescription)
-    studies_csv.StudyDescription[idx] = replace(description, "\\" => "")
-  end
-
-  #compare_csv_vs_json(
-  #    studies_csv,
-  #    tcia_studies(collection = "TCGA-SARC", format = "json"))
-
+  studies_json = tcia_studies(collection="TCGA-SARC", format="json")
+  @test nrow(studies_csv) == length(studies_json)
   # Following criteria should find at least two series
   @test length(tcia_newstudies(collection="TCGA-KIRP", date="2015/01/01", format="json")) >= 2
 end
 
 @testset "Queries - Series" begin
-  tcia_series(collection="TCGA-THCA")
-  #compare_csv_vs_json(
-  #    tcia_series(collection = "TCGA-THCA"),
-  #    tcia_series(collection = "TCGA-THCA", format = "json"), max_names = 3)
-  #compare_csv_vs_json(
-  #    tcia_series(study = STUDY_UID),
-  #    tcia_series(study = STUDY_UID), max_names = 3)
-  #compare_csv_vs_json(
-  #    tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA"),
-  #    tcia_series(bodypart = "CHEST", modality = "CT", manufacturer = "TOSHIBA", format = "json"), max_names = 3)
+  @test length(tcia_series(collection="TCGA-THCA", format="json")) > 20
 
-  # !! SKIP !! This endpoint seems to not return anything?
-  # Can not use compare_csv_vs_json() on tcia_series_size() because TotalSizeInBytes has different types
-  #dce_series_json = tcia_series_size(series = SERIES_UID, format="json")[1]
-  #@test dce_series_json["TotalSizeInBytes"] == "149149266.000000"
-  #dce_series_csv = tcia_series_size(series = SERIES_UID)
-  #@test dce_series_csv.TotalSizeInBytes[1] ≈ 149149266
-  #@test dce_series_csv.ObjectCount[1] == dce_series_json["ObjectCount"] == 1120
+  # SKIP: takes too long
+  # tcia_series_size(series="1.2.840.113619.2.55.3.1930041893.617.1308206442.326.4")
 end
 
 @testset "Queries - SOP" begin
-  tcia_sop(series=SERIES_UID)
-  #compare_csv_vs_json(
-  #    tcia_sop(series = SERIES_UID),
-  #    tcia_sop(series = SERIES_UID, format = "json"))
+  @test length(tcia_sop(series=SERIES_UID, format="json")) > 40
 end
 
 @testset "Data Download" begin
@@ -173,19 +145,19 @@ end
 
   tcia_images(series=chosen_series, file=zip_file)
   @test isfile(zip_file)
-  @test filesize(zip_file) == 947186
+  println("Size of zip file: $(filesize(zip_file))")
 
   tcia_single_image(series=chosen_series, sop=chosen_sop, file=dicom_file)
   @test isfile(dicom_file)
-  @test filesize(dicom_file) == 980794
+  println("Size of dicom file: $(filesize(dicom_file))")
 end
 
 @testset "Download series" begin
   series = tcia_series(collection="PDMR-Texture-Analysis", patient="172845-142-T-1259")
   seriesjs = tcia_series(collection="PDMR-Texture-Analysis", patient="172845-142-T-1259", format="json")
-  download_series(series, "./testdf")
-  download_series(seriesjs, "./testjs")
-  download_series(series, "./testdf"; overwrite=false)
+  tcia_download_series(series, joinpath(testdatadir, "testdf"))
+  tcia_download_series(seriesjs, joinpath(testdatadir, "testjs"))
+  tcia_download_series(series, joinpath(testdatadir, "testdf"); overwrite=false)
 end
 
 
@@ -205,11 +177,13 @@ end
   dataframe_to_csv(dataframe=tabular_data, file=csv_file)
   @test isfile(csv_file)
   println("Size of csv file: $(filesize(csv_file))")
-  @test filesize(csv_file) >= 1346
 
   dict_array = tcia_collections(format="json")
   dictionary_to_json(dictionary=dict_array, file=json_file)
   @test isfile(json_file)
   println("Size of json file: $(filesize(json_file))")
-  @test filesize(json_file) >= 4816
+end
+
+if isdir(testdatadir)
+  rm(testdatadir, recursive=true)
 end

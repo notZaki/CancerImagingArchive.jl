@@ -3,7 +3,7 @@ module CancerImagingArchive
 using HTTP, CSV, DataFrames, JSON
 
 include("download_series.jl")
-export download_series
+export tcia_download_series
 
 export tcia_collections, tcia_modalities, tcia_bodyparts, tcia_manufacturers, tcia_studies, tcia_series, tcia_series_size
 export tcia_patients, tcia_patients_by_modality, tcia_newpatients, tcia_newstudies, tcia_sop
@@ -310,5 +310,13 @@ function dictionary_to_json(; dictionary, file::AbstractString)
   end
   return
 end
+
+# Adds ~80 seconds to precompile, skipping for now
+#@setup_workload begin
+#  @compile_workload begin
+#    a = tcia_patients_by_modality(collection="ACRIN-FLT-Breast", modality="OT")
+#    b = tcia_patients_by_modality(collection="ACRIN-FLT-Breast", modality="OT", format="json")
+#  end
+#end
 
 end # module
